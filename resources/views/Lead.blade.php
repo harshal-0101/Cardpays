@@ -18,9 +18,13 @@
 <body>
 
 <div class="sidebar-and-lead-container">
-  <div class="side-bar-section">
-    @include('components.Sidebar')
-  </div>
+
+@extends('layout.app')
+
+@section('title', 'Main Dashboard')
+
+@section('content')
+
 
 <div class="leads-continer-section">
 
@@ -282,6 +286,7 @@
     </div>
  </div>
 </div>
+@endsection
 </div>
 
 <script src="script.js"></script>

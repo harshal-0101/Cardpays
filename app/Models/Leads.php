@@ -19,4 +19,9 @@ class Leads extends Model
        'Owner',
        'Created_By'
     ];
+        
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'lead_id'); 
+    }
 }

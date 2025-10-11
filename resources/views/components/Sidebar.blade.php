@@ -1,37 +1,53 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Side Bar</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+    <link href="{{ asset('css/sidebar.css') }}" rel="stylesheet">
 </head>
-<body> -->
-    
-    <div class="dashboard-layout">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <i class="fa-solid fa-credit-card"></i>
-                <h2>Cards Pay</h2>
-            </div>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li><a href="#" class="nav-link active" data-view="leads-view"><i class="fa-solid fa-list-ul"></i> <span>Leads</span></a></li>
-                    <li><a href="#" class="nav-link" data-view="telecaller-view"><i class="fa-solid fa-headset"></i> <span>Telecaller</span></a></li>
-                    <li><a href="#" class="nav-link" data-view="manager-view"><i class="fa-solid fa-user-tie"></i> <span>Manager</span></a></li>
-                    <li><a href="#" class="nav-link" data-view="admin-view"><i class="fa-solid fa-shield-halved"></i> <span>Admin</span></a></li>
-                </ul>
-            </nav>
-        </aside>
+<body>
+
+<div class="crm-sidebar">
+    <div class="crm-sidebar-header">
+        CRM
     </div>
+    
+    <nav class="flex-1 overflow-y-auto">
+        
+        @php
+            $activeClass = 'nav-link-active';
+            $inactiveClass = 'nav-link-inactive';
+        @endphp
 
-    <!-- <script src="script.js"></script>
 
-</body>
-</html> -->
+        <a href="{{ route('admin.admin') }}" 
+           class="nav-link 
+           {{ request()->routeIs('admin.admin') ? $activeClass : $inactiveClass }}">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.942 3.313.805 2.551 2.433a1.724 1.724 0 00.046 2.607c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-.046 2.607c.762 1.628-.977 3.37-2.551 2.433a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.942-3.313-.805-2.551-2.433a1.724 1.724 0 00-.046-2.607c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 00.046-2.607c-.762-1.628.977-3.37 2.551-2.433a1.724 1.724 0 002.573-1.066z"></path></svg>
+            Admin Settings
+        </a>
+
+        <a href="{{ route('leads.Lead') }}"     
+           class="nav-link mt-4 
+           {{ request()->routeIs('leads.Lead') ? $activeClass : $inactiveClass }}"> 
+           
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M12 20a8 8 0 100-16 8 8 0 000 16z"></path></svg>
+            Lead Management
+        </a>
+
+        <a href="{{ route('caller.caller') }}"     
+           class="nav-link mt-4 
+           {{ request()->routeIs('caller.caller') ? $activeClass : $inactiveClass }}"> 
+           
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M12 20a8 8 0 100-16 8 8 0 000 16z"></path></svg>
+            Caller
+        </a>
+
+        <a href="{{ route('manager.manager') }}"     
+           class="nav-link mt-4 
+           {{ request()->routeIs('manager.manager') ? $activeClass : $inactiveClass }}"> 
+           
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M12 20a8 8 0 100-16 8 8 0 000 16z"></path></svg>
+            Manager
+        </a>
+
+        </nav>
+</div>

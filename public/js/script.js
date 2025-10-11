@@ -343,3 +343,33 @@
                 });
             }
         });
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Chart Initialization ---
+            const systemActivityCtx = document.getElementById('systemActivityChart').getContext('2d');
+            const systemActivityChart = new Chart(systemActivityCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Leads Generated',
+                        data: [650, 590, 800, 810, 560, 950],
+                        borderColor: 'rgba(0, 82, 204, 1)',
+                        backgroundColor: 'rgba(0, 82, 204, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }, {
+                        label: 'Conversions',
+                        data: [80, 75, 95, 110, 85, 120],
+                        borderColor: 'rgba(40, 167, 69, 1)',
+                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true
+                }
+            });
+        });

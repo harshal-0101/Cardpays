@@ -17,11 +17,12 @@ class LeadsController extends Controller
        }
    }
 
-    // app/Http/Controllers/LeadController.php
 
 public function store(Request $request)
 {
 
+    try{
+        
     $validatedData = $request->validate([
         'Name'       => 'required|string|max:255',
         'Mobile'     => 'required|string|max:20|unique:leads,Mobile', 
@@ -41,27 +42,36 @@ public function store(Request $request)
 
     return redirect()->route('leads.Lead')->with('success_message', 'Lead created successfully!');
 
-    // return redirect()->route('Lead')->with('success', 'Lead created successfully!');
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'An error occurred: '.$e->getMessage());
+    }
+   
 }
 
 public function bulkDestroy(Request $request)
 {
-    $request->validate([
+    try{
+        
+        $request->validate([
         'selected_leads' => 'required|array',
         'selected_leads.*' => 'exists:leads,id', // Ensure all IDs exist
-    ]);
+        ]);
+    
+        $leadIds = $request->input('selected_leads');
+    
+        // Use Eloquent's destroy for efficient bulk deletion
+        $count = Leads::destroy($leadIds);
+    
+        return redirect()->route('leads.Lead')->with('success_message', "Successfully deleted {$count} leads.");
 
-    $leadIds = $request->input('selected_leads');
-
-    // Use Eloquent's destroy for efficient bulk deletion
-    $count = Leads::destroy($leadIds);
-
-    return redirect()->route('leads.Lead')->with('success_message', "Successfully deleted {$count} leads.");
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'An error occurred: '.$e->getMessage());
+    }
 }
 
      public function exportCsv(): StreamedResponse
     {
-        // 1. Define the columns/headers
+      try{
         $headers = [
             'ID', 'Name', 'Mobile', 'City', 'Cards', 'Total Bill', 'Stage', 
             'Source', 'Due Days', 'Owner', 'Created By', 'Created At', 'Updated At'
@@ -109,6 +119,11 @@ public function bulkDestroy(Request $request)
             'Content-Type'        => 'text/csv',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
         ]);
+      } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'An error occurred: '.$e->getMessage());
+      }
     }
+
+    
 
 }
