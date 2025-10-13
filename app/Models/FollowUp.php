@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class FollowUp extends Model
 {
+    protected $table = 'follow_ups';
      protected $fillable = [
         'lead_id',
         'stage',

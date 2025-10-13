@@ -7,7 +7,7 @@
 
 <div class="crm-sidebar">
     <div class="crm-sidebar-header">
-        CRM
+        CardsPay
     </div>
     
     <nav class="flex-1 overflow-y-auto">

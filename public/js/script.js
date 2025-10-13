@@ -241,24 +241,24 @@
 
         // Sidebar scripts
 
-        document.addEventListener('DOMContentLoaded', function() {
-            // Find all the navigation links in the sidebar
-            const navLinks = document.querySelectorAll('.sidebar-nav .nav-link');
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     // Find all the navigation links in the sidebar
+        //     const navLinks = document.querySelectorAll('.sidebar-nav .nav-link');
 
-            // Add a click event listener to each link
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(event) {
-                    // Prevent the link from navigating away
-                    event.preventDefault();
+        //     // Add a click event listener to each link
+        //     navLinks.forEach(link => {
+        //         link.addEventListener('click', function(event) {
+        //             // Prevent the link from navigating away
+        //             event.preventDefault();
 
-                    // First, remove the 'active' class from all links
-                    navLinks.forEach(nav => nav.classList.remove('active'));
+        //             // First, remove the 'active' class from all links
+        //             navLinks.forEach(nav => nav.classList.remove('active'));
 
-                    // Then, add the 'active' class to the one that was just clicked
-                    this.classList.add('active');
-                });
-            });
-        });
+        //             // Then, add the 'active' class to the one that was just clicked
+        //             this.classList.add('active');
+        //         });
+        //     });
+        // });
 
 
 
@@ -372,4 +372,275 @@
                     responsive: true
                 }
             });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.header-tabs button');
+            const contents = document.querySelectorAll('.tab-content');
+
+            // Modal Elements
+            const editButton = document.getElementById('openEditModal');
+            const modal = document.getElementById('editLeadModal');
+            const leadEditForm = document.getElementById('leadEditForm');
+
+            // Overview Elements (for updating data)
+            const overviewNameValue = document.getElementById('overview-name-value');
+            const overviewMobileValue = document.getElementById('overview-mobile-value');
+            const overviewCityValue = document.getElementById('overview-city-value');
+            const overviewCardsValue = document.getElementById('overview-cards-value');
+            const overviewTotalBillValue = document.getElementById('overview-totalbill-value');
+            const overviewStageValue = document.getElementById('overview-stage-value');
+            const overviewSourceValue = document.getElementById('overview-source-value');
+            const overviewOwnerValue = document.getElementById('overview-owner-value');
+
+
+            // Modal Input Fields
+            const modalName = document.getElementById('modal-name');
+            const modalMobile = document.getElementById('modal-mobile');
+            const modalCity = document.getElementById('modal-city');
+            const modalCards = document.getElementById('modal-cards');
+            const modalTotalBill = document.getElementById('modal-total-bill');
+            const modalStage = document.getElementById('modal-stage');
+            const modalSource = document.getElementById('modal-source');
+            const modalOwner = document.getElementById('modal-owner');
+
+            // NEW Transaction Record Elements
+            const addRowBtn_leadTransaction = document.getElementById('addRowBtn_leadTransaction');
+            const leadTransactionTableBody = document.getElementById('leadTransactionTableBody');
+            const newRowTemplate = document.getElementById('newRowInputTemplate');
+
+            // Function to safely extract text from a badge element
+            function getBadgeValue(element) {
+                const badge = element.querySelector('.badge');
+                return badge ? badge.textContent.trim() : element.textContent.trim();
+            }
+
+            // Function to open the modal and sync data from the main view
+            function openModal() {
+                // 1. Sync data from overview to modal inputs
+                modalName.value = getBadgeValue(overviewNameValue);
+                modalMobile.value = getBadgeValue(overviewMobileValue);
+                modalCity.value = getBadgeValue(overviewCityValue);
+                modalStage.value = getBadgeValue(overviewStageValue);
+                modalSource.value = getBadgeValue(overviewSourceValue);
+
+                modalCards.value = getBadgeValue(overviewCardsValue);
+                modalTotalBill.value = getBadgeValue(overviewTotalBillValue).replace('Rs. ', '').replace(/,/g, '');
+                modalOwner.value = getBadgeValue(overviewOwnerValue);
+
+                // 2. Open modal
+                modal.classList.add('active');
+            }
+
+            // Function to close the modal
+            function closeModal() {
+                modal.classList.remove('active');
+            }
+
+            // --- Modal Event Listeners ---
+            if (editButton) {
+                editButton.addEventListener('click', openModal);
+            }
+
+            // Close modal when clicking outside the content (on the overlay)
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        closeModal();
+                    }
+                });
+            }
+
+            // Handle Save (Form Submission) - Logic for updating the main grid
+            if (leadEditForm) {
+                leadEditForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    // 1. Get new values from the modal inputs
+                    const newName = modalName.value;
+                    const newMobile = modalMobile.value;
+                    const newCity = modalCity.value;
+                    const newCards = modalCards.value;
+                    const newTotalBill = modalTotalBill.value;
+                    const newStage = modalStage.value;
+                    const newSource = modalSource.value;
+                    const newOwner = modalOwner.value;
+
+                    // 2. Update the corresponding fields in the Overview tab
+                    overviewNameValue.textContent = newName;
+                    overviewMobileValue.textContent = newMobile;
+                    overviewCardsValue.textContent = newCards;
+
+                    // Format Total Bill for display
+                    overviewTotalBillValue.textContent = 'Rs. ' + new Intl.NumberFormat('en-IN').format(newTotalBill);
+                    overviewOwnerValue.textContent = newOwner;
+
+                    // Fields with badges: overwrite content with a new badge span
+                    overviewCityValue.innerHTML = `<span class="badge">${newCity}</span>`;
+                    overviewStageValue.innerHTML = `<span class="badge">${newStage}</span>`;
+                    overviewSourceValue.innerHTML = `<span class="badge">${newSource}</span>`;
+
+                    // 3. Close the modal
+                    closeModal();
+                });
+            }
+
+
+            // --- Tab Switching Logic ---
+            function switchTab(targetTabId) {
+                tabs.forEach(tab => tab.classList.remove('active'));
+                contents.forEach(content => content.classList.remove('active'));
+
+                const activeTabButton = document.querySelector(`.header-tabs button[data-tab="${targetTabId}"]`);
+                const activeTabContent = document.getElementById(targetTabId);
+
+                if (activeTabButton) {
+                    activeTabButton.classList.add('active');
+                }
+                if (activeTabContent) {
+                    activeTabContent.classList.add('active');
+                }
+
+                // Show/Hide right actions (Edit/Update) for the Overview tab
+                const rightActions = document.querySelector('.header-right-actions');
+                if (targetTabId === 'overview') {
+                    rightActions.style.display = 'flex';
+                } else {
+                    rightActions.style.display = 'none';
+                }
+            }
+
+            // Add click event listeners to all tab buttons
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const targetTabId = this.getAttribute('data-tab');
+                    switchTab(targetTabId);
+                });
+            });
+
+            // Set the default active tab (Overview, as per last working state)
+            switchTab('overview');
+
+
+            // NEW: Follow Up Logic
+            const followUpForm = document.getElementById('followUpForm');
+            const followUpTableBody = document.getElementById('followUpTableBody');
+            const fuOwnerSelect = document.getElementById('fu-owner-select');
+            const fuTypeSelect = document.getElementById('fu-type-select');
+            const fuStatusSelect = document.getElementById('fu-status-select');
+            const fuDateInput = document.getElementById('fu-date-input');
+            const fuNotesTextarea = document.getElementById('fu-notes-textarea');
+
+            if (followUpForm) {
+                followUpForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    // 1. Get new values
+                    const type = fuTypeSelect.value;
+                    const status = fuStatusSelect.value;
+                    const date = fuDateInput.value;
+                    const owner = fuOwnerSelect.value;
+                    const notes = fuNotesTextarea ? fuNotesTextarea.value.trim() : 'N/A';
+
+                    // Skip if date is empty
+                    if (!date) return;
+
+                    // 2. Create status badge HTML
+                    const statusClass = status === 'Pending' ? 'status-pending' : 'status-completed';
+                    const statusHtml = `<span class="status-badge ${statusClass}">${status}</span>`;
+
+                    // 3. Create a new table row element
+                    const newRow = document.createElement('tr');
+                    newRow.setAttribute('data-status', status);
+                    newRow.innerHTML = `
+                        <td>${date}</td>
+                        <td>${type}</td>
+                        <td>${notes || '-'}</td>
+                        <td>${owner}</td>
+                        <td>${statusHtml}</td>
+                    `;
+
+                    // 4. Insert the new row at the top of the table (most recent first)
+                    followUpTableBody.prepend(newRow);
+
+                    // 5. Reset the form fields
+                    followUpForm.reset();
+
+                    // Set a default date for convenience
+                    fuDateInput.value = '2025-10-15';
+                });
+            }
+
+            // NEW: Attachment Upload Logic
+            const uploadFields = [
+                // UPDATED FIELDS
+                {
+                    id: 'aadhar-front-file',
+                    statusId: 'aadhar-front-status',
+                    label: 'Aadhar Card (Front)'
+                }, {
+                    id: 'aadhar-back-file',
+                    statusId: 'aadhar-back-status',
+                    label: 'Aadhar Card (Back)'
+                },
+                // EXISTING FIELDS
+                {
+                    id: 'pan-file',
+                    statusId: 'pan-status',
+                    label: 'PAN Card'
+                }, {
+                    id: 'photo-file',
+                    statusId: 'photo-status',
+                    label: 'Customer Photo'
+                }
+            ];
+
+            uploadFields.forEach(field => {
+                const inputFile = document.getElementById(field.id);
+                const statusSpan = document.getElementById(field.statusId);
+
+                if (inputFile) {
+                    inputFile.addEventListener('change', function() {
+                        if (this.files.length > 0) {
+                            console.log(`Simulating upload for ${field.label}: ${this.files[0].name}`);
+
+
+                            statusSpan.textContent = `Uploaded: ${this.files[0].name}`;
+                            statusSpan.style.color = '#28a745';
+                        } else {
+                            statusSpan.textContent = 'No file chosen';
+                            statusSpan.style.color = '#007bff';
+                        }
+                    });
+                }
+            });
+
+            // --- Transaction Table: Add Row & Delete Row Logic for 'Transaction Record' tab ---
+
+            // Function to handle row deletion (uses event delegation for dynamically added rows)
+            function handleDeleteRow(event) {
+                const deleteButton = event.target.closest('.delete-row-btn');
+                if (deleteButton) {
+                    event.preventDefault(); // Prevent default if inside a form
+                    deleteButton.closest('tr').remove();
+                }
+            }
+
+            // Add listener for dynamic delete buttons in the transaction table body
+            if (leadTransactionTableBody) {
+                leadTransactionTableBody.addEventListener('click', handleDeleteRow);
+            }
+
+            // Add new row functionality
+            if (addRowBtn_leadTransaction && leadTransactionTableBody && newRowTemplate) {
+                addRowBtn_leadTransaction.addEventListener('click', function() {
+                    const newRowContent = newRowTemplate.content.cloneNode(true);
+
+                    // Note: Event delegation via leadTransactionTableBody.addEventListener('click', handleDeleteRow)
+                    // already handles the deletion for new buttons, so explicit event listener on 
+                    // individual new buttons is not strictly necessary but harmless if added.
+
+                    leadTransactionTableBody.appendChild(newRowContent);
+                });
+            }
         });

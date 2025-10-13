@@ -194,14 +194,14 @@
                     <div class="icon" style="background-color: var(--danger);"><i class="fa-solid fa-globe"></i></div>
                     <div class="info">
                         <h3>Total Leads</h3>
-                        <p>10,840</p>
+                        <p>{{ number_format($totalLeads) }}</p>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="icon" style="background-color: var(--success);"><i class="fa-solid fa-handshake-simple"></i></div>
                     <div class="info">
                         <h3>Total Conversions</h3>
-                        <p>1,253</p>
+                        <p>{{ number_format($totalConversions) }}</p>
                     </div>
                 </div>
                 <div class="stat-card">

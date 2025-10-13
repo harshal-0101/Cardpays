@@ -9,7 +9,7 @@ class Leads extends Model
     protected $table = 'leads';
     protected $fillable = [
        'Name',
-       'Mobile',
+       'Mobile',    
        'City',
        'Cards',
        'Total_Bill',

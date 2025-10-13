@@ -250,6 +250,7 @@
                     <option value="New Lead" {{ old('Stage') == 'New Lead' ? 'selected' : '' }}>New Lead</option>
                     <option value="Contacted" {{ old('Stage') == 'Contacted' ? 'selected' : '' }}>Contacted</option>
                     <option value="Closed" {{ old('Stage') == 'Closed' ? 'selected' : '' }}>Closed</option>
+                    <option value="Converted" {{ old('Stage') == 'Converted' ? 'selected' : '' }}>Converted</option>
                 </select>
                 <label for="stage">Stage</label>
                 <i class="input-icon fa-solid fa-flag"></i>
