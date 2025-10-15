@@ -54,7 +54,7 @@ public function bulkDestroy(Request $request)
         
         $request->validate([
         'selected_leads' => 'required|array',
-        'selected_leads.*' => 'exists:leads,id', // Ensure all IDs exist
+        'selected_leads.*' => 'exists:leads,id', 
         ]);
     
         $leadIds = $request->input('selected_leads');
@@ -114,7 +114,7 @@ public function bulkDestroy(Request $request)
             fclose($file);
         };
 
-        // 3. Return the response with correct headers for download
+        
         return new StreamedResponse($callback, 200, [
             'Content-Type'        => 'text/csv',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
@@ -124,6 +124,13 @@ public function bulkDestroy(Request $request)
       }
     }
 
-    
+
+public function show($id)
+{
+    $lead = Leads::with(['cards', 'transactions', 'followUps'])->findOrFail($id);
+
+    return view('Leaddetails', compact('lead'));
+}
+
 
 }

@@ -292,57 +292,10 @@
         });
 
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const bulkDeleteForm = document.getElementById('bulkDeleteForm');
-            const selectAllCheckbox = document.getElementById('selectAllLeads');
-            const leadCheckboxes = document.querySelectorAll('.lead-checkbox');
 
-            // 1. SELECT ALL / DESELECT ALL LOGIC
-            if (selectAllCheckbox) {
-                selectAllCheckbox.addEventListener('change', function(e) {
-                    leadCheckboxes.forEach(checkbox => {
-                        checkbox.checked = e.target.checked;
-                    });
-                });
-            }
 
-            // 2. FORM SUBMISSION LOGIC
-            if (bulkDeleteForm) {
-                bulkDeleteForm.addEventListener('submit', function(event) {
-                    event.preventDefault(); // Prevent default form submission initially
 
-                    // Get all checked lead IDs
-                    const selectedCheckboxes = document.querySelectorAll('.lead-checkbox:checked');
 
-                    if (selectedCheckboxes.length === 0) {
-                        alert('Please select one or more leads to delete.');
-                        return;
-                    }
-
-                    // Confirmation dialog
-                    const confirmation = confirm(`Are you sure you want to delete ${selectedCheckboxes.length} selected lead(s)? This action cannot be undone.`);
-
-                    if (!confirmation) {
-                        return; // Stop here if user cancels
-                    }
-
-                    // Remove any previously appended hidden inputs
-                    this.querySelectorAll('input[name="selected_leads[]"]').forEach(input => input.remove());
-
-                    // Create and append a hidden input for each selected ID
-                    selectedCheckboxes.forEach(checkbox => {
-                        const hiddenInput = document.createElement('input');
-                        hiddenInput.type = 'hidden';
-                        hiddenInput.name = 'selected_leads[]'; // Must match controller validation name
-                        hiddenInput.value = checkbox.value;
-                        this.appendChild(hiddenInput);
-                    });
-
-                    // Finally, submit the form with the collected IDs
-                    this.submit();
-                });
-            }
-        });
 
 
         document.addEventListener('DOMContentLoaded', function() {

@@ -20,8 +20,18 @@ class Leads extends Model
        'Created_By'
     ];
         
+     public function cards()
+    {
+        return $this->hasMany(CardDetail::class, 'lead_id');
+    }
+
     public function transactions()
     {
-        return $this->hasMany(Transaction::class, 'lead_id'); 
+        return $this->hasMany(Transaction::class, 'lead_id');
+    }
+
+    public function followUps()
+    {
+        return $this->hasMany(FollowUp::class, 'lead_id');
     }
 }

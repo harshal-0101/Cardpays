@@ -8,7 +8,7 @@
 </head>
 <style>
 
-.toast-message {
+/* .toast-message {
     padding: 10px 20px;
     margin-bottom: 10px;
     border-radius: 5px;
@@ -30,7 +30,7 @@
 .toast-show {
     opacity: 1;
     transform: translateY(0);
-}
+} */
 </style>
 <body>
 

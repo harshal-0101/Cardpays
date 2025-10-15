@@ -41,133 +41,170 @@
             </div>
         </div>
 
+
+@if (session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fa-solid fa-circle-check"></i> {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+@endif
+
+@if (session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fa-solid fa-circle-exclamation"></i> {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+@endif
+
+@if ($errors->any())
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>Validation Error:</strong>
+        <ul style="margin: 0; padding-left: 20px;">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+@endif
+
         <div class="content-area">
             <div id="overview" class="tab-content active">
                 <div class="grid-container">
                     <div class="grid-item">
                         <label>Name:</label>
-                        <p id="overview-name-value">raj kumar</p>
+                        <p id="overview-name-value">{{ $lead->Name }}</p>
                     </div>
                     <div class="grid-item">
                         <label>Mobile:</label>
-                        <p id="overview-mobile-value">9312123000</p>
+                        <p id="overview-mobile-value">{{ $lead->Mobile }}</p>
                     </div>
                     <div class="grid-item">
                         <label>City:</label>
-                        <p id="overview-city-value"><span class="badge">Faridabad</span></p>
+                        <p id="overview-city-value"><span class="badge">{{ $lead->City }}</span></p>
                     </div>
                     <div class="grid-item">
                         <label>Cards:</label>
-                        <p id="overview-cards-value">4</p>
+                        <p id="overview-cards-value">{{ $lead->Cards }}</p>
                     </div>
                     <div class="grid-item">
                         <label>Total Bill:</label>
-                        <p id="overview-totalbill-value">Rs. 200,000</p>
+                        <p id="overview-totalbill-value">Rs. {{ number_format($lead->Total_Bill) }}</p>
                     </div>
                     <div class="grid-item">
                         <label>Stage:</label>
-                        <p id="overview-stage-value"><span class="badge">Converted</span></p>
+                        <p id="overview-stage-value"><span class="badge">{{ $lead->Stage }}</span></p>
                     </div>
                     <div class="grid-item">
                         <label>Source:</label>
-                        <p id="overview-source-value"><span class="badge">Facebook/Insta</span></p>
+                        <p id="overview-source-value"><span class="badge">{{ $lead->Source }}</span></p>
                     </div>
                     <div class="grid-item">
                         <label>Owner:</label>
-                        <p id="overview-owner-value">Pawan shinde</p>
+                        <p id="overview-owner-value">{{ $lead->Owner }}</p>
                     </div>
                 </div>
             </div>
 
             <div id="card-details" class="tab-content">
 
-                <div class="card-details-header">
+                <!-- <div class="card-details-header">
                     <button class="add-new-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                         Add new
                     </button>
                     <button class="custom-request-btn custom-request-btn-style">Custom request</button>
-                </div>
+                </div> -->
+                
 
                 <div class="card-details-table-wrapper">
                     <table class="card-details-table">
                         <thead>
                             <tr>
-                                <th></th>
+
                                 <th>Bank Name</th>
                                 <th>Bill Amount</th>
                                 <th>Due Date</th>
                                 <th>Card Type</th>
                                 <th>Card Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
+                              @foreach ($lead->cards as $card)
                             <tr>
-                                <td><input type="checkbox" checked></td>
-                                <td><span class="bank-badge">ICICI</span></td>
-                                <td>5,000</td>
-                                <td>13/09/2025</td>
-                                <td>Visa</td>
-                                <td><span class="status-badge status-active">Active</span></td>
+                                 <td><span class="bank-badge">{{ $card->bank_name }}</span></td>
+                                <td>{{ number_format($card->bill_amount) }}</td>
+                                <td>{{ \Carbon\Carbon::parse($card->due_date)->format('d/m/Y') }}</td>
+                                 <td>{{ $card->card_type }}</td>
+                                <td><span class="status-badge {{ $card->card_status == 'Active' ? 'status-active' : 'status-blocked' }}">{{ $card->card_status }}</span></td>
+                                 <td><form action="{{ route('cards.destroy', $card->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this card?');">
+                                     @csrf
+                                     @method('DELETE')
+                                     <button type="submit" class="btn btn-danger btn-sm" title="Delete Card">
+                                         <i class="fa-solid fa-trash"></i>
+                                     </button>
+                                 </form>
+                                 </td>
                             </tr>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td><span class="bank-badge">HDFC</span></td>
-                                <td>30,000</td>
-                                <td>15/09/2025</td>
-                                <td>Visa</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td><span class="bank-badge">SBI</span></td>
-                                <td>20,000</td>
-                                <td>30/09/2025</td>
-                                <td>Visa</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td><span class="bank-badge">RBL</span></td>
-                                <td>10,000</td>
-                                <td>16/09/2025</td>
-                                <td>Visa</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td><span class="bank-badge">AXIS</span></td>
-                                <td>20,000</td>
-                                <td>24/09/2025</td>
-                                <td>Visa</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                            </tr>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td><span class="bank-badge">YES BANK</span></td>
-                                <td>1,111</td>
-                                <td>23/10/2025</td>
-                                <td>Diners</td>
-                                <td><span class="status-badge status-blocked">Blocked/Settled</span></td>
-                            </tr>
+                            @endforeach
+
+                            @if($lead->cards->isEmpty())
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 20px;">No card details available.</td>
+                                </tr>
+                            @endif
                         </tbody>
                     </table>
                 </div>
 
-                <div class="table-footer">
+                <!-- <div class="table-footer">
                     <span>Total 7 items</span>
                     <div class="pagination-controls"><button>&lt;</button><button class="active">1</button><button>&gt;</button></div>
                     <select class="page-size-select"><option>20 / page</option></select>
-                </div><br>
+                </div><br> -->
 
                 <div class="add-card-form">
-                    <div class="form-group"><label for="bank-name-select"></label><select id="bank-name-select"><option value="" disabled selected>Select Bank</option><option value="icici">ICICI</option><option value="hdfc">HDFC</option></select></div>
-                    <div class="form-group"><label for="bill-amount-input"></label><input type="number" id="bill-amount-input" placeholder="Bill Amount"></div>
-                    <div class="form-group input-with-icon"><label for="due-date-input"></label><input type="date" id="due-date-input" placeholder="Select date"><span class="date-icon">-</span></div>
-                    <div class="form-group"><label for="card-type-select"></label><select id="card-type-select"><option value="visa" selected>Visa</option><option value="mastercard">MasterCard</option><option value="diners">Diners</option></select></div>
-                    <div class="form-group"><label for="card-status-select"></label><select id="card-status-select"><option value="active" selected>Active</option><option value="blocked">Blocked/Settled</option></select></div>
-                    <div class="form-group"><button class="add-card-btn">Add Card</button></div>
-                </div>
+    <form action="{{ route('cards.store') }}" method="POST" id="addCardForm">
+        @csrf
+      <input type="hidden" name="lead_id" value="{{ $lead->id }}">
+        <div class="form-group">
+            <!-- <label for="bank-name-select">Bank Name:</label> -->
+            <select id="bank-name-select" name="bank_name">
+                <option value="" disabled selected>Select Bank</option>
+                <option value="ICICI">ICICI</option>
+                <option value="HDFC">HDFC</option>
+                </select>
+        </div>
+        <div class="form-group">
+            <!-- <label for="bill-amount-input">Bill Amount:</label> -->
+            <input type="number" id="bill-amount-input" name="bill_amount" placeholder="Bill Amount">
+        </div>
+        <div class="form-group input-with-icon">
+            <!-- <label for="due-date-input">Due Date:</label> -->
+            <input type="date" id="due-date-input" name="due_date" placeholder="Select date">
+            <span class="date-icon">-</span>
+        </div>
+        <div class="form-group">
+            <!-- <label for="card-type-select">Card Type:</label> -->
+            <select id="card-type-select" name="card_type">
+                <option value="Visa" selected>Visa</option>
+                <option value="MasterCard">MasterCard</option>
+                <option value="Diners">Diners</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <!-- <label for="card-status-select">Card Status:</label> -->
+            <select id="card-status-select" name="card_status">
+                <option value="Active" selected>Active</option>
+                <option value="Blocked">Blocked/Settled</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="add-card-btn">Add Card</button>
+        </div>
+    </form>
+    </div>
 
             </div>
 
@@ -202,32 +239,29 @@
                                         <th>Short</th>
                                     </tr>
                                 </thead>
-                                <tbody class="table-data-body">
+                                <tbody>
+                                    @foreach ($lead->transactions as $txn)
                                     <tr>
-                                        <td data-label="Service"><a href="#" class="action-link">Card Swipe</a></td>
-                                        <td data-label="Bank"><a href="#" class="action-link">HDFC Bank</a></td>
-                                        <td data-label="Card Type">Credit</td>
-                                        <td data-label="Charge %">2.5%</td>
-                                        <td data-label="Swip Amount">₹20,000</td>
-                                        <td data-label="Swipe Mode">POS</td>
-                                        <td data-label="Payment">₹19,500</td>
-                                        <td data-label="Pay Mode">TDS</td>
-                                        <td data-label="Charge Amount">₹500</td>
-                                        <td data-label="Short">₹400</td>
+                                        <td>{{ $txn->Service }}</td>
+                                        <td>{{ $txn->Bank }}</td>
+                                        <td>{{ $txn->Card_Type }}</td>
+                                        <td>{{ $txn->Charge }}%</td>
+                                        <td>₹{{ number_format($txn->Swipe_Amt) }}</td>
+                                        <td>{{ $txn->Swipe_Mode }}</td>
+                                        <td>₹{{ number_format($txn->Payment) }}</td>
+                                        <td>{{ $txn->Pay_Mode }}</td>
+                                        <td>₹{{ number_format($txn->Charge_Amt) }}</td>
+                                        <td>₹{{ number_format($txn->Short) }}</td>
                                     </tr>
-                                    <tr>
-                                        <td data-label="Service"><a href="#" class="action-link">UPI</a></td>
-                                        <td data-label="Bank"><a href="#" class="action-link">SBI</a></td>
-                                        <td data-label="Card Type">Debit</td>
-                                        <td data-label="Charge %">0.5%</td>
-                                        <td data-label="Swip Amount">₹15,000</td>
-                                        <td data-label="Swipe Mode">Online</td>
-                                        <td data-label="Payment">₹14,925</td>
-                                        <td data-label="Pay Mode">Cash</td>
-                                        <td data-label="Charge Amount">₹75</td>
-                                        <td data-label="Short">₹0</td>
-                                    </tr>
+                                    @endforeach
+
+                                    @if($lead->transactions->isEmpty())
+                                        <tr>
+                                            <td colspan="10" style="text-align: center; padding: 20px;">No transactions available.</td>
+                                        </tr>
+                                        @endif
                                 </tbody>
+                                
                             </table>
                         </div>
                     </div>
@@ -292,14 +326,7 @@
                         <h3>Follow Up History (Recent)</h3>
                         <div class="table-responsive">
                             <table class="follow-up-history-table">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Type</th>
-                                        <th>Notes</th>
-                                        <th>Assigned To</th>
-                                        <th>Status</th>
-                                    </tr>
+                                
                                 </thead>
                                 <tbody id="followUpTableBody">
                                     <tr data-status="Completed">
@@ -333,50 +360,21 @@
 
             <div id="history" class="tab-content">
                 <div class="history-timeline">
-
-                    <div class="history-entry">
-                        <div class="history-date">08/Oct/2025 23:10 IST</div>
-                        <div class="history-details">
-                            <span class="history-badge badge-financial">Transaction</span> Processed **₹20,000** Card Swipe payment via **HDFC Bank** (Credit Card).
+                    @foreach ($lead->followUps as $follow)
+                        <div class="history-entry">
+                            <div class="history-date">{{ $follow->created_at->format('d/M/Y H:i') }}</div>
+                            <div class="history-details">
+                                <span class="history-badge badge-system">Stage Changed</span>
+                                Lead moved to <b>{{ $follow->stage }}</b> by <b>{{ $follow->Telecaller }}</b>.
+                            </div>
                         </div>
-                    </div>
+                    @endforeach
 
-                    <div class="history-entry">
-                        <div class="history-date">08/Oct/2025 23:05 IST</div>
-                        <div class="history-details">
-                            <span class="history-badge badge-financial">Transaction</span> Processed **₹15,000** UPI payment via **SBI** (Debit Card).
-                        </div>
-                    </div>
-
-                    <div class="history-entry">
-                        <div class="history-date">08/Oct/2025 10:30 IST</div>
-                        <div class="history-details">
-                            <span class="history-badge badge-manual">Overview Update</span> **Total Bill** updated to **Rs. 200,000** by **Pawan Shinde**.
-                        </div>
-                    </div>
-
-                    <div class="history-entry">
-                        <div class="history-date">01/Oct/2025 14:45 IST</div>
-                        <div class="history-details">
-                            <span class="history-badge badge-call">Follow Up</span> Follow up task **Completed**: Discussed card details, customer deferred for 1 week. (Logged by **Pawan shinde**).
-                        </div>
-                    </div>
-
-                    <div class="history-entry">
-                        <div class="history-date">24/Sep/2025 18:00 IST</div>
-                        <div class="history-details">
-                            <span class="history-badge badge-system">Card Added</span> New card added: **AXIS Bank**, Bill ₹20,000, Due 24/09/2025.
-                        </div>
-                    </div>
-
-                    <div class="history-entry">
-                        <div class="history-date">20/Sep/2025 09:15 IST</div>
-                        <div class="history-details">
-                            <span class="history-badge badge-system">Creation</span> Lead **Raj Kumar** generated from **Facebook/Insta** and assigned to **Pawan shinde**.
-                        </div>
-                    </div>
-
+                    @if($lead->followUps->isEmpty())
+                        <p style="text-align: center; padding: 20px; color: #666;">No history available.</p>
+                    @endif
                 </div>
+
             </div>
 
 
@@ -435,9 +433,16 @@
                         <button class="transaction-button" style="margin-right: auto;"><i class="fa fa-filter"></i> Filter</button>
                         <button id="addRowBtn_leadTransaction" class="btn btn-primary" style="margin-left: 10px;"><i class="fa-solid fa-plus"></i> Add Row</button>
                         <button class="transaction-button"><i class="fa-solid fa-file-import"></i> Import</button>
-                        <button class="transaction-button"><i class="fa-solid fa-file-export"></i> Export</button>
+                        <button class="transaction-button"><a href="{{ route('transactions.export.csv') }}" style="color: inherit; text-decoration: none;"><i class="fa-solid fa-file-export"></i> Export</a></button>
                         <button class="transaction-button"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
-                        <button class="transaction-button" style="background-color: #dc3545; color: #fff;"><i class="fa-solid fa-trash"></i> Delete</button>
+                        
+                          <form id="bulkDeleteForm" action="{{ route('transactions.bulk_destroy') }}" method="POST" style="display: inline;">
+                              @csrf
+                              <button type="submit" class="btn btn-danger" id="bulkDeleteBtn">
+                                  <i class="fa-solid fa-trash"></i> Delete
+                              </button>
+                          </form>
+                        
                     </div>
 
                     <div class="transaction-table-block" style="padding: 0; margin-top: 0; border: none; box-shadow: none;">
@@ -445,7 +450,7 @@
                             <table id="leadTransactionTable">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox"></th>
+                                        <th><input type="checkbox" id="selectAllTxnCheckboxes"></th>
                                         <th>Service</th>
                                         <th>Bank</th>
                                         <th>Card Type</th>
@@ -457,45 +462,35 @@
                                         <th>Charge Amount</th>
                                         <th>Short</th>
                                         <th>Action</th>
+                                    
                                     </tr>
                                 </thead>
                                 <tbody class="table-data-body" id="leadTransactionTableBody">
+                                   @foreach ($lead->transactions as $txn)
                                     <tr>
-                                        <td data-label="Select"><input type="checkbox"></td>
-                                        <td data-label="Service"><a href="#" class="action-link">Card Swipe</a></td>
-                                        <td data-label="Bank"><a href="#" class="action-link">HDFC Bank</a></td>
-                                        <td data-label="Card Type">Credit</td>
-                                        <td data-label="Charge %" style="text-align: right;">2.5%</td>
-                                        <td data-label="Swip Amount" style="text-align: right;">₹20,000</td>
-                                        <td data-label="Swipe Mode">POS</td>
-                                        <td data-label="Payment" style="text-align: right;">₹19,500</td>
-                                        <td data-label="Pay Mode">TDS</td>
-                                        <td data-label="Charge Amount" style="text-align: right;">₹500</td>
-                                        <td data-label="Short" style="text-align: right;">₹400</td>
-                                        <td data-label="Action"><button type="button" class="btn btn-danger btn-sm delete-row-btn"><i class="fa-solid fa-trash"></i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td data-label="Select"><input type="checkbox"></td>
-                                        <td data-label="Service"><a href="#" class="action-link">UPI</a></td>
-                                        <td data-label="Bank"><a href="#" class="action-link">SBI</a></td>
-                                        <td data-label="Card Type">Debit</td>
-                                        <td data-label="Charge %" style="text-align: right;">0.5%</td>
-                                        <td data-label="Swip Amount" style="text-align: right;">₹15,000</td>
-                                        <td data-label="Swipe Mode">Online</td>
-                                        <td data-label="Payment" style="text-align: right;">₹14,925</td>
-                                        <td data-label="Pay Mode">Cash</td>
-                                        <td data-label="Charge Amount" style="text-align: right;">₹75</td>
-                                        <td data-label="Short" style="text-align: right;">₹0</td>
-                                        <td data-label="Action"><button type="button" class="btn btn-danger btn-sm delete-row-btn"><i class="fa-solid fa-trash"></i></button></td>
-                                    </tr>
-                                </tbody>
-                                <tfoot class="table-add-row-footer">
-                                    <tr>
-                                        <td colspan="12" class="add-row-cell">
-                                            <button type="submit" class="btn btn-success btn-sm submit-set-btn" style="float: left;"><i class="fa-solid fa-check"></i> Submit Set</button>
+                                        <td data-label="Select">
+                                             <input type="checkbox" name="selected_transactions[]" value="{{$txn->id }}" class="txn-checkbox">
                                         </td>
+                                        <td data-label="Service"><a href="#" class="action-link">{{ $txn->Service }}</a></td>
+                                        <td data-label="Bank"><a href="#" class="action-link">{{ $txn->Bank }}</a></td>
+                                        <td data-label="Card Type">{{ $txn->Card_Type }}</td>
+                                        <td data-label="Charge %" style="text-align: right;">{{ $txn->Charge }}</td>
+                                        <td data-label="Swip Amount" style="text-align: right;">₹{{ number_format($txn->Swipe_Amt) }}</td>
+                                        <td data-label="Swipe Mode">{{ $txn->Swipe_Mode }}</td>
+                                        <td data-label="Payment" style="text-align: right;">{{ number_format($txn->Payment) }}</td>
+                                        <td data-label="Pay Mode">{{ $txn->Pay_Mode }}</td>
+                                        <td data-label="Charge Amount" style="text-align: right;">₹{{ number_format($txn->Charge_Amt) }}</td>
+                                        <td data-label="Short" style="text-align: right;">₹{{ number_format($txn->Short) }}</td>
                                     </tr>
-                                </tfoot>
+                                    @endforeach
+
+                                    @if($lead->transactions->isEmpty())
+                                        <tr>
+                                            <td colspan="12" style="text-align: center; padding: 20px;">No transactions available.</td>
+                                        </tr>
+                                        @endif
+                                </tbody>
+                                
                             </table>
                         </div>
                     </div>
@@ -573,22 +568,151 @@
 
             <template id="newRowInputTemplate">
         <tr class="input-row">
-            <td data-label="Select"><input type="checkbox"></td>
-            <td data-label="Service"><select><option value="Card Swipe">Card Swipe</option><option value="UPI">UPI</option><option value="Net Banking">Net Banking</option></select></td>
-            <td data-label="Bank"><input type="text" placeholder="Bank Name"></td>
-            <td data-label="Card Type"><select><option value="Credit">Credit</option><option value="Debit">Debit</option></select></td>
-            <td data-label="Charge %" style="text-align: right;"><input type="number" step="0.01" placeholder="%"></td>
-            <td data-label="Swip Amount" style="text-align: right;"><input type="number" step="0.01" placeholder="Amount"></td>
-            <td data-label="Swipe Mode"><select><option value="POS">POS</option><option value="Online">Online</option></select></td>
-            <td data-label="Payment" style="text-align: right;"><input type="number" step="0.01" placeholder="Payment"></td>
-            <td data-label="Pay Mode"><input type="text" placeholder="Mode"></td>
-            <td data-label="Charge Amount" style="text-align: right;"><input type="number" step="0.01" placeholder="Charge"></td>
-            <td data-label="Short" style="text-align: right;"><input type="number" step="0.01" placeholder="Short"></td>
-            <td data-label="Action"><button type="button" class="btn btn-danger btn-sm delete-row-btn"><i class="fa-solid fa-trash"></i></button></td>
-        </tr>
+<tr class="input-row">
+    <td data-label="Select"><input type="checkbox"></td>
+    <td data-label="Service">
+        <select name="Service" form="txnForm">
+            <option value="Card Swipe">Card Swipe</option>
+            <option value="UPI">UPI</option>
+            <option value="Net Banking">Net Banking</option>
+        </select>
+    </td>
+    <td data-label="Bank"><input type="text" name="Bank" placeholder="Bank Name" form="txnForm"></td>
+    <td data-label="Card Type">
+        <select name="Card_Type" form="txnForm">
+            <option value="Credit">Credit</option>
+            <option value="Debit">Debit</option>
+        </select>
+    </td>
+    <td data-label="Charge %" style="text-align:right;">
+        <input type="number" name="Charge" step="0.01" placeholder="%" form="txnForm">
+    </td>
+    <td data-label="Swip Amount" style="text-align:right;">
+        <input type="number" name="Swipe_Amt" step="0.01" placeholder="Amount" form="txnForm">
+    </td>
+    <td data-label="Swipe Mode">
+        <select name="Swipe_Mode" form="txnForm">
+            <option value="POS">POS</option>
+            <option value="Online">Online</option>
+        </select>
+    </td>
+    <td data-label="Payment" style="text-align:right;">
+        <input type="number" name="Payment" step="0.01" placeholder="Payment" form="txnForm">
+    </td>
+    <td data-label="Pay Mode"><input type="text" name="Pay_Mode" placeholder="Mode" form="txnForm"></td>
+    <td data-label="Charge Amount" style="text-align:right;">
+        <input type="number" name="Charge_Amt" step="0.01" placeholder="Charge" form="txnForm">
+    </td>
+    <td data-label="Short" style="text-align:right;">
+        <input type="number" name="Short" step="0.01" placeholder="Short" form="txnForm">
+    </td>
+    
+    <!-- Form only here -->
+    <td data-label="Action">
+        <form id="txnForm" action="{{ route('transactions.store') }}" method="POST">
+            @csrf
+            <input type="hidden" name="lead_id" value="{{ $lead->id }}">
+            <button type="submit" class="btn btn-success btn-sm">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+            <button type="button" class="btn btn-danger btn-sm delete-row-btn"><i class="fa-solid fa-trash"></i></button>
+        </form>
+    </td>
+</tr>
+
+</tr>
+
     </template>
 @endsection
 </div>
 </body>
 
 </html>
+
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+            const bulkDeleteForm = document.getElementById('bulkDeleteForm');
+            const selectAllCheckbox = document.getElementById('selectAllTxnCheckboxes');
+            const leadCheckboxes = document.querySelectorAll('.txn-checkbox');
+
+            // 1. SELECT ALL / DESELECT ALL LOGIC
+            if (selectAllCheckbox) {
+                selectAllCheckbox.addEventListener('change', function(e) {
+                    leadCheckboxes.forEach(checkbox => {
+                        checkbox.checked = e.target.checked;
+                    });
+                });
+            }
+
+            // 2. FORM SUBMISSION LOGIC
+            if (bulkDeleteForm) {
+                bulkDeleteForm.addEventListener('submit', function(event) {
+                    event.preventDefault(); // Prevent default form submission initially
+
+                    // Get all checked lead IDs
+                    const selectedCheckboxes = document.querySelectorAll('.txn-checkbox:checked');
+
+                    if (selectedCheckboxes.length === 0) {
+                        alert('Please select one or more txn to delete.');
+                        return;
+                    }
+
+                    // Confirmation dialog
+                    const confirmation = confirm(`Are you sure you want to delete ${selectedCheckboxes.length} selected lead(s)? This action cannot be undone.`);
+
+                    if (!confirmation) {
+                        return; // Stop here if user cancels
+                    }
+
+                    // Remove any previously appended hidden inputs
+                    this.querySelectorAll('input[name="selected_transactions[]"]').forEach(input => input.remove());
+
+                    // Create and append a hidden input for each selected ID
+                    selectedCheckboxes.forEach(checkbox => {
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = 'selected_transactions[]'; // Must match controller validation name
+                        hiddenInput.value = checkbox.value;
+                        this.appendChild(hiddenInput);
+                    });
+
+                    // Finally, submit the form with the collected IDs
+                    this.submit();
+                });
+            }
+        });
+
+// -------------------- filter code --------------------------       
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const transactionSelect = document.getElementById('transaction-select');
+        
+        if (transactionSelect) {
+            // Set the initial selected value based on the URL query parameter 'filter'
+            const urlParams = new URLSearchParams(window.location.search);
+            const currentFilter = urlParams.get('filter');
+            
+            // This ensures the dropdown reflects the current filter after a reload
+            if (currentFilter) {
+                transactionSelect.value = currentFilter;
+            } else {
+                 // Set to 'all' if no filter is in the URL and the initial selected option is disabled/empty
+                 transactionSelect.value = 'all'; 
+            }
+
+            // Event listener for when the user changes the filter
+            transactionSelect.addEventListener('change', function() {
+                const selectedValue = this.value;
+                const currentUrl = window.location.href.split('?')[0]; // Get URL without existing query params
+
+                if (selectedValue && selectedValue !== 'all') {
+                    // Navigate to the current page URL, adding the new filter query parameter
+                    window.location.href = currentUrl + '?filter=' + selectedValue + '#transaction';
+                } else {
+                    // Navigate to the current page URL, removing the filter parameter
+                    window.location.href = currentUrl + '#transaction';
+                }
+            });
+        }
+    });
+</script>

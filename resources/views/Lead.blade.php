@@ -61,9 +61,7 @@
                  {{-- *** UPDATED BULK DELETE FORM *** --}}
                 <form id="bulkDeleteForm" action="{{ route('leads.bulk_destroy') }}" method="POST" style="display: inline;">
                     @csrf
-                    {{-- The actual method will be POST, and we send the IDs in the request body --}}
-                    
-                    {{-- YOUR ORIGINAL DELETE BUTTON --}}
+                
                     <button type="submit" class="btn btn-danger" id="bulkDeleteBtn">
                         <i class="fa-solid fa-trash"></i> Delete
                     </button>
@@ -87,7 +85,7 @@
                         <td data-label="Select">
                             <input type="checkbox" name="selected_leads_to_delete[]" class="lead-checkbox" value="{{ $lead->id }}">
                         </td>
-                        <td data-label="Name"><a href="#" class="action-link">{{ $lead->Name }}</a></td> 
+                        <td data-label="Name"><a href="leads/{{ $lead->id }}" class="action-link">{{ $lead->Name }}</a></td> 
                         <td data-label="Mobile"><a href="tel:{{ $lead->Mobile }}" class="action-link">{{ $lead->Mobile }}</a></td> 
                     
                         <td data-label="City">{{ $lead->City }}</td>
@@ -293,3 +291,57 @@
 <script src="script.js"></script>
 </body>
 </html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+            const bulkDeleteForm = document.getElementById('bulkDeleteForm');
+            const selectAllCheckbox = document.getElementById('selectAllLeads');
+            const leadCheckboxes = document.querySelectorAll('.lead-checkbox');
+
+            // 1. SELECT ALL / DESELECT ALL LOGIC
+            if (selectAllCheckbox) {
+                selectAllCheckbox.addEventListener('change', function(e) {
+                    leadCheckboxes.forEach(checkbox => {
+                        checkbox.checked = e.target.checked;
+                    });
+                });
+            }
+
+            // 2. FORM SUBMISSION LOGIC
+            if (bulkDeleteForm) {
+                bulkDeleteForm.addEventListener('submit', function(event) {
+                    event.preventDefault(); // Prevent default form submission initially
+
+                    // Get all checked lead IDs
+                    const selectedCheckboxes = document.querySelectorAll('.lead-checkbox:checked');
+
+                    if (selectedCheckboxes.length === 0) {
+                        alert('Please select one or more leads to delete.');
+                        return;
+                    }
+
+                    // Confirmation dialog
+                    const confirmation = confirm(`Are you sure you want to delete ${selectedCheckboxes.length} selected lead(s)? This action cannot be undone.`);
+
+                    if (!confirmation) {
+                        return; // Stop here if user cancels
+                    }
+
+                    // Remove any previously appended hidden inputs
+                    this.querySelectorAll('input[name="selected_leads[]"]').forEach(input => input.remove());
+
+                    // Create and append a hidden input for each selected ID
+                    selectedCheckboxes.forEach(checkbox => {
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = 'selected_leads[]'; // Must match controller validation name
+                        hiddenInput.value = checkbox.value;
+                        this.appendChild(hiddenInput);
+                    });
+
+                    // Finally, submit the form with the collected IDs
+                    this.submit();
+                });
+            }
+        });
+</script>
