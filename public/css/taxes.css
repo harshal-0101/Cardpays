@@ -1,0 +1,501 @@
+/* src/taxes.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+:root {
+    --primary-color: #2f7ed2;
+    --primary-hover: #2f7ed2;
+    --secondary-color: #F3F4F6;
+    --secondary-hover: #E5E7EB;
+    --text-color: #111827;
+    --text-muted: #6B7280;
+    --border-color: #D1D5DB;
+    --white: #FFFFFF;
+    --danger: #EF4444;
+    --danger-hover: #DC2626;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --panel-width: 400px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.admin-panel {
+    width: 1300px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: var(--white);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+
+/* --- Header --- */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header-left h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+}
+
+.header-left .bx-arrow-back {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-muted);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.search-bar {
+    position: relative;
+}
+
+.search-bar input {
+    padding: 0.6rem 0.75rem 0.6rem 2.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.search-bar .bx-search {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+}
+
+.btn {
+    padding: 0.6rem 1rem;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-secondary {
+    background-color: var(--white);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--secondary-color);
+}
+
+
+/* --- List Container (Table) --- */
+
+.list-container {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.list-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 50px;
+    /* Adapted for Taxes */
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.list-header {
+    background-color: var(--secondary-color);
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    border-radius: 8px 8px 0 0;
+}
+
+.data-row {
+    background-color: var(--white);
+}
+
+.data-row:hover {
+    background-color: #F9FAFB;
+}
+
+.data-row span {
+    font-size: 0.9rem;
+}
+
+
+/* --- Toggle Switch --- */
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: var(--primary-color);
+}
+
+input:checked+.slider:before {
+    transform: translateX(20px);
+}
+
+
+/* --- More Options Dropdown --- */
+
+.more-options {
+    position: relative;
+    text-align: right;
+}
+
+.more-options>.bx {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 50%;
+}
+
+.more-options>.bx:hover {
+    background-color: var(--secondary-color);
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    width: 200px;
+    z-index: 100;
+}
+
+.more-options.active .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu ul {
+    list-style: none;
+}
+
+.dropdown-menu li {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.dropdown-menu li:hover {
+    background-color: var(--secondary-color);
+}
+
+.dropdown-menu li .bx {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+}
+
+.dropdown-menu li.delete-option {
+    color: var(--danger);
+}
+
+.dropdown-menu li.delete-option .bx {
+    color: var(--danger);
+}
+
+
+/* --- Pagination --- */
+
+.pagination {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 1.5rem;
+    gap: 0.5rem;
+}
+
+.pagination a {
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 0.5rem 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.pagination a.active {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border-color: var(--primary-color);
+}
+
+.pagination a.disabled {
+    color: #ccc;
+    pointer-events: none;
+    border-color: #ccc;
+}
+
+
+/* --- Slide-in Panel --- */
+
+.panel-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.panel-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.slide-in-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: var(--panel-width);
+    height: 100%;
+    background-color: var(--white);
+    z-index: 1001;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.slide-in-panel.visible {
+    transform: translateX(0);
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.panel-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.close-btn {
+    font-size: 2rem;
+    font-weight: 300;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+
+/* --- Form --- */
+
+.admin-form {
+    padding: 1.5rem;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.form-group .required-asterisk {
+    color: var(--danger);
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+/* .form-group-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+} */
+
+.form-group .submit-btn {
+    width: 20%;
+    justify-content: center;
+    padding: 0.8rem;
+}
+
+.edit-btn-group {
+    display: flex;
+    gap: 1rem;
+}
+
+.edit-btn-group .btn {
+    flex: 1;
+    justify-content: center;
+}
+
+
+/* --- Show Panel --- */
+
+.show-panel-content {
+    padding: 1.5rem;
+}
+
+.detail-item {
+    display: flex;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px dashed var(--border-color);
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    width: 100px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.detail-colon {
+    margin-right: 1rem;
+}
+
+.detail-value {
+    font-weight: 500;
+}
+
+
+/* --- Responsive --- */
+
+@media (max-width: 768px) {
+     :root {
+        --panel-width: 90%;
+    }
+    header,
+    .header-right {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+    .list-row {
+        grid-template-columns: 1fr 1fr;
+        /* Simpler stack */
+        gap: 0.5rem;
+        padding-bottom: 1.5rem;
+    }
+    .list-header {
+        display: none;
+        /* Hide header on mobile */
+    }
+    .data-row span:before {
+        /* Add labels for mobile view */
+        content: attr(data-label);
+        font-weight: 600;
+        display: block;
+        margin-bottom: 0.25rem;
+        color: var(--text-muted);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+    }
+    /* Add data-label attributes to your HTML spans for this to work */
+}

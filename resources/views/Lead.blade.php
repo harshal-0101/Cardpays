@@ -58,7 +58,7 @@
                 <!-- <button class="btn btn-secondary"><i class="fa-solid fa-file-export"></i> </button> -->
                 <button id="refreshBtn" class="btn btn-secondary"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
 
-                 {{-- *** UPDATED BULK DELETE FORM *** --}}
+              
                 <form id="bulkDeleteForm" action="{{ route('leads.bulk_destroy') }}" method="POST" style="display: inline;">
                     @csrf
                 

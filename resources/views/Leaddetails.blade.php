@@ -501,68 +501,75 @@
             <div id="editLeadModal" class="modal-overlay">
                 <div class="modal-content">
                     <h3>Lead Basic Info.</h3>
-                    <form id="leadEditForm">
+                      <form id="leadEditForm" action="{{ route('leads.update', $lead->id) }}" method="POST">
+                        @csrf
+                        <!-- if you use PUT method (recommended for updates) -->
+                        @method('PUT')
+                    
                         <div class="modal-form-grid">
-
                             <div class="form-group">
                                 <label for="modal-name">Name:</label>
-                                <input type="text" id="modal-name" value="raj kumar">
+                                <input type="text" id="modal-name" name="Name" value="{{ $lead->Name }}">
                             </div>
+                    
                             <div class="form-group">
                                 <label for="modal-mobile">Mobile:</label>
-                                <input type="text" id="modal-mobile" value="09312123000">
+                                <input type="text" id="modal-mobile" name="Mobile" value="{{ $lead->Mobile }}">
                             </div>
+                    
                             <div class="form-group">
                                 <label for="modal-city">City:</label>
-                                <select id="modal-city">
-                            <option value="Faridabad">Faridabad</option>
-                            <option value="Delhi">Delhi</option>
-                        </select>
+                                <select id="modal-city" name="City">
+                                    <option value="Faridabad" {{ $lead->City == 'Faridabad' ? 'selected' : '' }}>Faridabad</option>
+                                    <option value="Delhi" {{ $lead->City == 'Delhi' ? 'selected' : '' }}>Delhi</option>
+                                </select>
                             </div>
-
+                    
                             <div class="form-group">
                                 <label for="modal-cards">Cards:</label>
-                                <input type="text" id="modal-cards" value="4">
+                                <input type="text" id="modal-cards" name="Cards" value="{{ $lead->Cards }}">
                             </div>
+                    
                             <div class="form-group">
                                 <label for="modal-total-bill">Total Bill:</label>
-                                <input type="text" id="modal-total-bill" value="200000">
+                                <input type="text" id="modal-total-bill" name="Total_Bill" value="{{ $lead->Total_Bill }}">
                             </div>
-                            <div class="form-group">
-                            </div>
-
+                    
                             <div class="form-group">
                                 <label for="modal-source">Source:</label>
-                                <select id="modal-source">
-                            <option value="Facebook/Insta">Facebook/Insta</option>
-                            <option value="Website">Website</option>
-                            <option value="Walk in Lead">Walk in Lead</option>
-                            <option value="Local Advt">Local Advt</option>
-                            <option value="Call/IVR">Call/IVR</option>
-                            <option value="Reference">Reference</option>
-                            <option value="GMB">GMB</option>
-                        </select>
+                                <select id="modal-source" name="Source">
+                                    <option value="Facebook/Insta" {{ $lead->Source == 'Facebook/Insta' ? 'selected' : '' }}>Facebook/Insta</option>
+                                    <option value="Website" {{ $lead->Source == 'Website' ? 'selected' : '' }}>Website</option>
+                                    <option value="Walk in Lead" {{ $lead->Source == 'Walk in Lead' ? 'selected' : '' }}>Walk in Lead</option>
+                                    <option value="Local Advt" {{ $lead->Source == 'Local Advt' ? 'selected' : '' }}>Local Advt</option>
+                                    <option value="Call/IVR" {{ $lead->Source == 'Call/IVR' ? 'selected' : '' }}>Call/IVR</option>
+                                    <option value="Reference" {{ $lead->Source == 'Reference' ? 'selected' : '' }}>Reference</option>
+                                    <option value="GMB" {{ $lead->Source == 'GMB' ? 'selected' : '' }}>GMB</option>
+                                </select>
                             </div>
+                    
                             <div class="form-group">
                                 <label for="modal-stage">Stage:</label>
-                                <select id="modal-stage">
-                            <option value="Converted">Converted</option>
-                            <option value="Not Connected">Not Connected</option>
-                        </select>
+                                <select id="modal-stage" name="Stage">
+                                    <option value="Converted" {{ $lead->Stage == 'Converted' ? 'selected' : '' }}>Converted</option>
+                                    <option value="Not Connected" {{ $lead->Stage == 'Not Connected' ? 'selected' : '' }}>Not Connected</option>
+                                </select>
                             </div>
+                    
                             <div class="form-group">
                                 <label for="modal-owner">Owner:</label>
-                                <select id="modal-owner">
-                            <option value="Pawan shinde">Pawan shinde</option>
-                            <option value="Bhoomika">Bhoomika</option>
-                        </select>
+                                <select id="modal-owner" name="Owner">
+                                    <option value="Pawan shinde" {{ $lead->Owner == 'Pawan shinde' ? 'selected' : '' }}>Pawan shinde</option>
+                                    <option value="Bhoomika" {{ $lead->Owner == 'Bhoomika' ? 'selected' : '' }}>Bhoomika</option>
+                                </select>
                             </div>
                         </div>
-
+                    
                         <div class="modal-footer">
                             <button type="submit" class="save-btn">Save</button>
                         </div>
                     </form>
+
                 </div>
             </div>
 
@@ -715,4 +722,6 @@
             });
         }
     });
+
+    
 </script>

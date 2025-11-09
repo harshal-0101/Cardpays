@@ -1,0 +1,296 @@
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            background-color: #f4f7fa;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: row-reverse;
+            /* max-width: 1900px; */
+            width: 1300px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background-color: #ffffff;
+            border-left: 1px solid #e0e6ed;
+            padding: 30px;
+            flex-shrink: 0;
+        }
+        
+        .sidebar h2 {
+            color: #135ee0;
+            font-size: 24px;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: #6b7280;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 6px;
+            transition: background-color 0.2s, color 0.2s;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+        }
+        /* Styling for ALL icons in the sidebar */
+        
+        .sidebar-menu a i {
+            margin-left: 12px;
+            margin-right: 0;
+            font-size: 18px;
+            color: #9ca3af;
+        }
+        
+        .sidebar-menu a:hover {
+            background-color: #f0f2f5;
+            color: #4a5568;
+        }
+        
+        .sidebar-menu li.active a {
+            background-color: #ede9fe;
+            color: #007bff;
+            font-weight: 600;
+        }
+        /* Specific styling for the ACTIVE icon (blue/purple) */
+        
+        .sidebar-menu li.active a i {
+            color: #007bff;
+        }
+        
+        .sidebar-menu li.active {
+            position: relative;
+            margin-right: -30px;
+        }
+        
+        .sidebar-menu li.active a {
+            border-radius: 6px 0 0 6px;
+            padding-right: 30px;
+        }
+        /* --- Main Content Styles --- */
+        
+        .main-content {
+            flex-grow: 1;
+            padding: 30px 40px;
+            background-color: #fcfdfe;
+        }
+        
+        .content-section:not(.active) {
+            display: none;
+        }
+        
+        .content-section h1 {
+            color: #1a202c;
+            font-size: 28px;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        /* Adjusted h1 alignment for sections that are left-aligned in images */
+        
+        #pdf-settings-section h1,
+        #finance-settings-section h1 {
+            text-align: left;
+            padding-left: 20px;
+        }
+        
+        .section-card {
+            background-color: #ffffff;
+            border: 1px solid #e0e6ed;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 0 auto 20px auto;
+            max-width: 700px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+            overflow-y: scroll;
+            max-height: 500px;
+        }
+        
+        .section-card h3 {
+            color: #1a202c;
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+        
+        .section-card p {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+        
+        .form-group {
+            display: flex;
+            align-items: flex-start;
+            /* Default for textarea */
+            margin-bottom: 20px;
+        }
+        /* Re-aligning to center for all single-line inputs (General, Company, Currency, Finance) */
+        
+        #finance-settings-section .form-group,
+        #company-settings-section .form-group,
+        #general-settings-section .form-group,
+        #currency-settings-section .form-group {
+            align-items: center;
+        }
+        
+        #finance-settings-section .form-group label,
+        #company-settings-section .form-group label,
+        #general-settings-section .form-group label,
+        #currency-settings-section .form-group label {
+            padding-top: 0;
+        }
+        
+        .form-group label {
+            width: 150px;
+            font-size: 15px;
+            color: #374151;
+            font-weight: 500;
+            flex-shrink: 0;
+            text-align: right;
+            padding-right: 15px;
+            padding-top: 10px;
+            /* For textarea alignment */
+        }
+        
+        .form-group label span {
+            color: #ef4444;
+            margin-right: 4px;
+        }
+        /* Apply common styling to inputs, selects, and textareas */
+        
+        .form-group select,
+        .form-group input:not([type="file"]),
+        .form-group textarea {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            /* Corrected to 6px for consistency with buttons/cards */
+            font-size: 15px;
+            color: #374151;
+            background-color: #ffffff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            max-width: 300px;
+            /* Uniform width for all single-line fields */
+        }
+        
+        .form-group input:not([type="file"]) {
+            height: 40px;
+        }
+        
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .form-group select:focus,
+        .form-group input:not([type="file"]):focus,
+        .form-group textarea:focus {
+            border-color: #0052cc;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+            outline: none;
+        }
+        /* --- Select Specific Styling (for custom arrow) --- */
+        
+        .styled-select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="%236B7280" d="M4.516 7.548c.436-.446 1.043-.481 1.576 0L10 11.516l3.908-3.968c.533-.481 1.14-.446 1.576 0 .436.445.408 1.197 0 1.615l-4.706 4.792c-.287.29-.785.29-1.072 0l-4.706-4.792c-.408-.418-.436-1.17 0-1.615z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 12px;
+            padding-right: 30px;
+        }
+        /* --- Custom File Upload Styling --- */
+        
+        .file-upload-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        #logo-upload {
+            opacity: 0;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .upload-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background-color: #f7f8fa;
+            color: #374151;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .upload-button i {
+            margin-right: 8px;
+            color: #6b7280;
+        }
+        
+        .upload-button:hover {
+            background-color: #e5e7eb;
+        }
+        /* --- Save Button --- */
+        
+        .save-button {
+            display: block;
+            margin: 20px auto 0 auto;
+            background-color: #0052cc;
+            color: #ffffff;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        
+        .save-button:hover {
+            background-color: #0052cc;
+        }

@@ -133,4 +133,43 @@ public function show($id)
 }
 
 
+public function update(Request $request, $id)
+{
+    try {
+        // Validate input
+        $validated = $request->validate([
+            'Name' => 'required|string|max:255',
+            'Mobile' => 'required|string|max:15',
+            'City' => 'required|string|max:255',
+            'Cards' => 'nullable|numeric',
+            'Total_Bill' => 'nullable|numeric',
+            'Stage' => 'required|string|max:255',
+            'Source' => 'required|string|max:255',
+            'Owner' => 'required|string|max:255',
+        ]);
+
+        // Find the lead
+        $lead = Leads::findOrFail($id);
+
+        // Update the lead record
+        $lead->update($validated);
+
+        // Optional: return success response
+        return response()->json([
+            'success' => true,
+            'message' => 'Lead updated successfully!',
+            'data' => $lead
+        ]);
+    } catch (\Exception $e) {
+        // Handle error
+        return response()->json([
+            'success' => false,
+            'message' => 'Error updating lead: ' . $e->getMessage()
+        ], 500);
+    }
 }
+
+
+}
+
+
