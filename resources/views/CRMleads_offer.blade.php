@@ -29,6 +29,30 @@
 
         <br>
 
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+{{-- Error Message --}}
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
+{{-- Validation Errors --}}
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
         <div class="action-bar">
             <div class="search-group">
                 <input type="text" placeholder="search">
@@ -45,34 +69,31 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Number</th>
-                        <th>Company</th>
+                        <th>Lead Id</th>
+                        <th>Offer Title</th>
+                        <th>Offer Description</th>
                         <th>Date</th>
-                        <th>Sub Total</th>
-                        <th>Total</th>
-                        <th>Note</th>
+                        <th>Expire Date</th>
                         <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @foreach ($offers as $offer)
                     <tr>
-                        <td>QTL-001</td>
-                        <td>Global Tech Solutions</td>
-                        <td>2025/11/01</td>
-                        <td>$ 1,200.00</td>
-                        <td>$ 1,284.00</td>
-                        <td>Initial consultation quote.</td>
+                        <td>{{ $offer->lead_id }}</td>
+                        <td>{{ $offer->title }}</td>
+                        <td>{{ $offer->description }}</td>
+                        <td>{{ $offer->created_at }}</td>
+                        <td>{{ $offer->expire_date }}</td>
                         <td><span class="status-badge status-sent">Sent</span></td>
                     </tr>
+                    @endforeach
+                    
+                    @if($offers->isEmpty())
                     <tr>
-                        <td>QTL-002</td>
-                        <td>Future Systems Inc.</td>
-                        <td>2025/10/25</td>
-                        <td>$ 4,500.00</td>
-                        <td>$ 4,500.00</td>
-                        <td>Quote for V2 upgrade.</td>
-                        <td><span class="status-badge status-accepted">Accepted</span></td>
+                        <td colspan="6" style="text-align: center;">No offers found.</td>
                     </tr>
+                    @endif
                 </tbody>
             </table>
         </div>
@@ -96,15 +117,11 @@
                 </div>
             </div>
 
-            <form id="quoteForm">
-                <div class="form-grid">
+            <!-- <form id="quoteForm"> -->
+                <!-- <div class="form-grid">
                     <div class="form-group span-2">
-                        <label>* Lead</label>
-                        <input type="text" placeholder="search" list="clientOptions">
-                        <datalist id="clientOptions">
-                            <option value="Lead A - John Doe"></option>
-                            <option value="Lead B - Jane Smith"></option>
-                        </datalist>
+                        <label>Lead Id</label>
+                        <input type="text" placeholder="Lead Id" >
                     </div>
                     <div class="form-group">
                         <label>* Number</label>
@@ -150,46 +167,57 @@
                         <label>Note</label>
                         <input type="text">
                     </div>
-                </div>
+                </div> -->
 
                 <div class="item-list-container">
-                    <div class="item-list-header">
+                    <!-- <div class="item-list-header">
+                        
                         <div>Item</div>
                         <div>Description</div>
-                        <div>Quantity</div>
-                        <div>Price</div>
-                        <div>Total</div>
-                        <div></div>
-                    </div>
+                        <div>Lead Id</div>
+                        <div>Date</div>
+                        <div>Expire Date</div>
+                        <div>Status</div>
+                    </div> -->
 
                     <div id="itemRowsContainer">
                         <div class="item-row item-template">
-                            <input type="text" placeholder="Item Name">
-                            <input type="text" placeholder="description Name">
-                            <input type="number" value="1" min="0">
-                            <div class="price-input-group">
-                                <span>$</span>
-                                <input type="number" value="0.00" min="0">
-                            </div>
-                            <div class="price-input-group">
-                                <span>$</span>
-                                <input type="text" value="00.00" readonly>
-                            </div>
-                            <i class="fas fa-trash-alt delete-icon" onclick="deleteItemRow(this)"></i>
+                           <form action="{{ route('leadOffer.store') }}" method="POST"> 
+                            @csrf
+                            <label for="title">title</label>
+                            <input type="text" placeholder="title" name="title"><br>
+                            <label for="description">Description</label>
+                            <input type="text" placeholder="description Name" name="description"><br>
+                            <label for="lead_id">Lead ID</label>
+                            <input type="number" value="1" min="0" name="lead_id"><br>
+                            <label for="date">Date</label>
+                            <input type="date" value="2025-11-01" name="date"><br>
+                            <label for="expire_date">Expire Date</label>
+                            <input type="date" value="2025-12-01" name="expire_date"><br>
+                            <label for="status">Status</label>
+                            <select class="offer-status" name="status">
+                                <option>Draft</option>
+                                <option>Sent</option>
+                                <option>Accepted</option>
+                                <option>Rejected</option>
+                            </select>
+
+                            <button type="submit" class="save-button-bottom">
+                            <i class="fas fa-save"></i> Save
+                           </button>
+                           </form> 
+                            <!-- <i class="fas fa-trash-alt delete-icon" onclick="deleteItemRow(this)"></i> -->
                         </div>
                     </div>
                 </div>
 
-                <button type="button" class="add-field-btn" onclick="addItemRow()">
+                <!-- <button type="button" class="add-field-btn" onclick="addItemRow()">
                     <i class="fas fa-plus"></i> Add Field
-                </button>
+                </button> -->
 
                 <div class="totals-section">
-                    <button type="submit" class="save-button-bottom">
-                        <i class="fas fa-save"></i> Save
-                    </button>
-
-                    <div class="totals-box">
+                    
+                    <!-- <div class="totals-box">
                         <div class="total-row">
                             <label>Sub Total</label>
                             <div class="price-input-group">
@@ -211,9 +239,9 @@
                                 <input type="text" value="00.00">
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
-            </form>
+            <!-- </form> -->
         </div>
     </div>
    @endsection

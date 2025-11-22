@@ -8,6 +8,7 @@ use App\Http\Controllers\CallerController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CardDetailController;
 use App\Http\Controllers\EexpenseController;
+use App\Http\Controllers\OffersController;
 
 
 Route::get('/home', function () {
@@ -18,9 +19,9 @@ Route::get('/payment', function () {
     return view('CRMpayment');
 })->name('payment.payment');
 
-Route::get('/lead-offer', function () {
-    return view('CRMleads_offer');
-})->name('lead.offer');
+// Route::get('/lead-offer', function () {
+//     return view('CRMleads_offer');
+// })->name('lead.offer');
 
 Route::get('setting',function(){
     return view('CRMsetting');
@@ -121,3 +122,6 @@ Route::delete('/cards/{cardDetail}', [CardDetailController::class, 'destroy'])->
 Route::get('/expense',[EexpenseController::class, 'index'])->name('expense.index');
 Route::post('/expense',[EexpenseController::class, 'store'])->name('expense.store');
 Route::get('/expense/search',[EexpenseController::class, 'Search'])->name('expense.search');
+
+Route::get('/lead-offer',[OffersController::class, 'index'])->name('leadOffer.index');
+Route::post('/lead-offer',[OffersController::class, 'store'])->name('leadOffer.store');
