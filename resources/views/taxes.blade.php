@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">   
     <title>Taxes List UI</title>
     <link rel="stylesheet" href="{{asset('css/taxes.css')}}">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -29,11 +30,35 @@
                     <i class='bx bx-refresh'></i>
                     Refresh
                 </button>
-                <button class="btn btn-primary" id="add-tax-btn">
-                    Add New Tax
-                </button>
+                    <button class="btn btn-primary" id="add-tax-btn">
+                        Add New Tax
+                    </button>
             </div>
         </header>
+
+        @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+{{-- Error Message --}}
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
+{{-- Validation Errors --}}
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
         <div class="list-container">
             <div class="list-row list-header">
@@ -44,30 +69,35 @@
                 <span></span> </div>
 
             <div class="list-row data-row">
-                <span>Tax 0%</span>
-                <span>0%</span>
-                <span>
-                    <label class="toggle-switch">
-                        <input type="checkbox">
-                        <span class="slider"></span>
-                    </label>
-                </span>
-                <span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" checked>
-                        <span class="slider"></span>
-                    </label>
-                </span>
+               @foreach($taxes as $tax) 
+                <span>{{ $tax->Name }}</span>
+                <span>{{ $tax->rate }}%</span>
+              <span>
+                  <label class="toggle-switch">
+                      <input type="checkbox" class="toggle-input" data-id="{{ $tax->id }}" data-field="Default"{{ $tax->Default ? 'checked' : '' }}>
+                      <span class="slider"></span>
+                  </label>
+              </span>
+              
+              <span>
+                  <label class="toggle-switch">
+                      <input type="checkbox" class="toggle-input" data-id="{{ $tax->id }}" data-field="Enabled" {{ $tax->Enabled ? 'checked' : '' }}>
+
+                      <span class="slider"></span>
+                  </label>
+              </span>
+
+
 
                 <span class="more-options" data-id="tax_12345">
                     <i class='bx bx-dots-horizontal-rounded'></i>
                     <div class="dropdown-menu">
                         <ul>
-                            <li data-action="show">
+                            <!-- <li data-action="show">
                                 <i class='bx bx-show'></i>
                                 <span>Show</span>
-                            </li>
-                            <li data-action="edit">
+                            </li> -->
+                            <li data-action="edit" onclick="openEditTaxForm({{ $tax->id }})">
                                 <i class='bx bx-pencil'></i>
                                 <span>Edit</span>
                             </li>
@@ -75,20 +105,47 @@
                                 <i class='bx bx-copy'></i>
                                 <span>Copy ID</span>
                             </li>
-                            <li data-action="delete" class="delete-option">
+                            <li data-action="delete" class="delete-option" onclick="deleteTax({{ $tax->id }})">
                                 <i class='bx bx-trash'></i>
                                 <span>Delete</span>
+                                <form id="deleteForm-{{ $tax->id }}" action="{{ route('tax.destroy', $tax->id) }}" method="POST" style="display:none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
                             </li>
                         </ul>
                     </div>
                 </span>
+                @endforeach
+
+                @if($taxes->isEmpty())
+                    <p>No taxes available.</p>
+                @endif
             </div>
         </div>
 
         <div class="pagination">
-            <a href="#" class="disabled"><i class='bx bx-chevron-left'></i></a>
-            <a href="#" class="active">1</a>
-            <a href="#"><i class='bx bx-chevron-right'></i></a>
+              @if ($taxes->onFirstPage())
+              <a class="disabled"><i class='bx bx-chevron-left'></i></a>
+          @else
+              <a href="{{ $taxes->previousPageUrl() }}"><i class='bx bx-chevron-left'></i></a>
+          @endif
+      
+          {{-- Page Numbers --}}
+          @foreach ($taxes->links()->elements[0] ?? [] as $page => $url)
+              @if ($page == $taxes->currentPage())
+                  <a class="active">{{ $page }}</a>
+              @else
+                  <a href="{{ $url }}">{{ $page }}</a>
+              @endif
+          @endforeach
+      
+          {{-- Next Button --}}
+          @if ($taxes->hasMorePages())
+              <a href="{{ $taxes->nextPageUrl() }}"><i class='bx bx-chevron-right'></i></a>
+          @else
+              <a class="disabled"><i class='bx bx-chevron-right'></i></a>
+          @endif
         </div>
     </div>
 
@@ -100,21 +157,22 @@
             <button class="close-btn" id="close-add-panel-btn">&times;</button>
         </div>
         
-        <form class="admin-form" id="add-tax-form">
+        <form class="admin-form" id="add-tax-form" method="POST" action="{{ route('tax.store') }}">
+            @csrf
             <div class="form-group">
                 <label for="tax-name">Name <span class="required-asterisk">*</span></label>
-                <input type="text" id="tax-name" required>
+                <input type="text" id="tax-name" name="Name" required >
             </div>
             
             <div class="form-group">
                 <label for="tax-value">Value (e.g., 5% or 10) <span class="required-asterisk">*</span></label>
-                <input type="text" id="tax-value" required>
+                <input type="text" id="tax-value" name="rate" required>
             </div>
             
             <div class="form-group form-group-toggle">
                 <label for="tax-default">Default</label>
                 <label class="toggle-switch">
-                    <input type="checkbox" id="tax-default">
+                    <input type="checkbox" id="tax-default" name="Default" value="1">
                     <span class="slider"></span>
                 </label>
             </div>
@@ -122,7 +180,7 @@
             <div class="form-group form-group-toggle">
                 <label for="tax-enabled">Enabled</label>
                 <label class="toggle-switch">
-                    <input type="checkbox" id="tax-enabled" checked>
+                    <input type="checkbox" id="tax-enabled" name="Enabled" value="1" checked>
                     <span class="slider"></span>
                 </label>
             </div>
@@ -213,4 +271,73 @@
     </div>
     <script src="{{ asset('js/taxes.js') }}"></script>
 </body>
+<Script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.toggle-input').forEach(input => {
+        input.addEventListener('change', function () {
+            let id = this.dataset.id;
+            let field = this.dataset.field;  // Default or Enabled
+            let value = this.checked ? 1 : 0;
+
+            fetch(`/tax/update-toggle/${id}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({ field: field, value: value })
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(err => console.error(err));
+        });
+    });
+});
+
+function deleteTax(id) {
+    if (confirm("Are you sure you want to delete this payment mode?")) {
+        document.getElementById('deleteForm-' + id).submit();
+    }
+}
+
+
+document.getElementById("edit-tax-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    let id = document.getElementById("edit-tax-id").value;
+
+    let formData = {
+        name: document.getElementById("edit-tax-name").value,
+        value: document.getElementById("edit-tax-value").value,
+        default: document.getElementById("edit-tax-default").checked ? 1 : 0,
+        enabled: document.getElementById("edit-tax-enabled").checked ? 1 : 0,
+        _token: document.querySelector('meta[name="csrf-token"]').content
+    };
+
+    fetch(`/tax/update/${id}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(formData)
+    })
+    .then(res => res.json())
+    .then(response => {
+        if (response.success) {
+            alert("Updated successfully!");
+
+            closeEditPanel();   // your own function to hide panel
+        }
+    })
+    .catch(err => {
+        console.error("Error:", err);
+    });
+});
+
+
+</Script>
+
 </html>

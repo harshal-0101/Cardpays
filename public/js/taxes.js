@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const closeAllPanels = () => {
         allPanels.forEach(panel => {
-            if(panel) panel.classList.remove('visible');
+            if (panel) panel.classList.remove('visible');
         });
         overlay.classList.remove('visible');
     };
@@ -93,36 +93,36 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 case 'delete':
                     console.log('Delete tax:', taxId);
-                    if (confirm('Are you sure you want to delete this tax?')) {
-                        // TODO: Add delete logic
-                        parentRow.remove(); // Optimistic deletion
-                        alert('Tax deleted.');
-                    }
+                    // if (confirm('Are you sure you want to delete this tax?')) {
+                    //     // TODO: Add delete logic
+                    //     parentRow.remove(); // Optimistic deletion
+                    //     alert('Tax deleted.');
+                    // }
                     break;
             }
         });
     });
 
     // --- Form Submission Handling ---
-    const addTaxForm = document.getElementById('add-tax-form');
-    if (addTaxForm) {
-        addTaxForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            console.log('Add Tax Form Submitted');
-            // TODO: Add API call to create new tax
-            alert('New tax added (simulated)!');
-            closeAllPanels();
-        });
-    }
+    // const addTaxForm = document.getElementById('add-tax-form');
+    // if (addTaxForm) {
+    //     addTaxForm.addEventListener('submit', (e) => {
+    //         e.preventDefault();
+    //         console.log('Add Tax Form Submitted');
+    //         // TODO: Add API call to create new tax
+    //         alert('New tax added (simulated)!');
+    //         closeAllPanels();
+    //     });
+    // }
 
-    const editTaxForm = document.getElementById('edit-tax-form');
-    if (editTaxForm) {
-        editTaxForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            console.log('Edit Tax Form Submitted');
-            // TODO: Add API call to update tax
-            alert('Tax updated (simulated)!');
-            closeAllPanels();
-        });
-    }
+    // const editTaxForm = document.getElementById('edit-tax-form');
+    // if (editTaxForm) {
+    //     editTaxForm.addEventListener('submit', (e) => {
+    //         e.preventDefault();
+    //         console.log('Edit Tax Form Submitted');
+    //         // TODO: Add API call to update tax
+    //         alert('Tax updated (simulated)!');
+    //         closeAllPanels();
+    //     });
+    // }
 });

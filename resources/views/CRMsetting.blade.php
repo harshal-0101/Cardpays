@@ -44,21 +44,68 @@
 
             <div id="company-settings-section" class="content-section">
                 <h1>Company Settings</h1>
-                <div class="section-card">
-                    <h3>Company Settings</h3>
-                    <p>Update Your Company Informations</p>
-                    <div class="form-group"><label for="companyName">Company Name:</label><input type="text" id="companyName" value="COMPANY Name"></div>
-                    <div class="form-group"><label for="companyAddress">Company Address:</label><input type="text" id="companyAddress" value="25, Your Company Address"></div>
-                    <div class="form-group"><label for="companyState">Company State:</label><input type="text" id="companyState" value="New York"></div>
-                    <div class="form-group"><label for="companyCountry">Company Country:</label><input type="text" id="companyCountry" value="United State"></div>
-                    <div class="form-group"><label for="companyEmail">Company Email:</label><input type="email" id="companyEmail" value="youremail@example.com"></div>
-                    <div class="form-group"><label for="companyPhone">Company Phone:</label><input type="tel" id="companyPhone" value="+1 345234654"></div>
-                    <div class="form-group"><label for="companyWebsite">Company Website:</label><input type="text" id="companyWebsite" value="www.example.com"></div>
-                    <div class="form-group"><label for="companyTax">Company Tax Number:</label><input type="text" id="companyTax" value="91231255234"></div>
-                    <div class="form-group"><label for="companyVat">Company Vat Number:</label><input type="text" id="companyVat" value="91231255234"></div>
-                    <div class="form-group"><label for="companyReg">Company Reg Number:</label><input type="text" id="companyReg" value="00001231421"></div>
-                </div>
-                <button class="save-button">Save</button>
+               <form action="{{ route('setting.company.update') }}" method="POST">
+    @csrf
+
+    <div class="section-card">
+        <h3>Company Settings</h3> 
+        <p>Update Your Company Informations</p>
+
+        <div class="form-group">
+            <label for="companyName">Company Name:</label>
+            <input type="text" id="companyName" name="Comp_Name" value="{{ $company->Comp_Name ?? '' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="companyAddress">Company Address:</label>
+            <input type="text" id="companyAddress" name="Comp_Address" value="{{ $company->Comp_Address ?? '' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="companyState">Company State:</label>
+            <input type="text" id="companyState" name="Comp_State" value="{{ $company->Comp_State ?? '' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="companyCountry">Company Country:</label>
+            <input type="text" id="companyCountry" name="Comp_Country" value="{{ $company->Comp_Country ?? '' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="companyEmail">Company Email:</label>
+            <input type="email" id="companyEmail" name="Comp_Email" value="{{ $company->Comp_Email ?? '' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="companyPhone">Company Phone:</label>
+            <input type="tel" id="companyPhone" name="Comp_Phone" value="{{ $company->Comp_Phone ?? '' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="companyWebsite">Company Website:</label>
+            <input type="text" id="companyWebsite" name="Comp_Website" value="{{ $company->Comp_Website ?? '' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="companyTax">Company Tax Number:</label>
+            <input type="text" id="companyTax" name="Comp_Tax_Number" value="{{ $company->Comp_Tax_Number ?? '' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="companyVat">Company Vat Number:</label>
+            <input type="text" id="companyVat" name="Comp_Vat_Number" value="{{ $company->Comp_Vat_Number ?? '' }}">
+        </div>
+
+        <div class="form-group">
+            <label for="companyReg">Company Reg Number:</label>
+            <input type="text" id="companyReg" name="Comp_Reg_Number" value="{{ $company->Comp_Reg_Number ?? '' }}">
+        </div>
+
+    </div>
+
+    <button type="submit" class="save-button">Save</button>
+</form>
+
             </div>
 
             <div id="logo-settings-section" class="content-section ">

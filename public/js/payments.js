@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const closeAllPanels = () => {
         allPanels.forEach(panel => {
-            if(panel) panel.classList.remove('visible');
+            if (panel) panel.classList.remove('visible');
         });
         overlay.classList.remove('visible');
     };
@@ -86,42 +86,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 case 'copy-id':
                     console.log('Copy ID:', paymentModeId);
-                    navigator.clipboard.writeText(paymentModeId).then(() => {
-                        alert('Payment Mode ID copied to clipboard!');
-                    });
+                    // navigator.clipboard.writeText(paymentModeId).then(() => {
+                    //     alert('Payment Mode ID copied to clipboard!');
+                    // });
                     break;
                 case 'delete':
                     console.log('Delete Payment Mode:', paymentModeId);
-                    if (confirm('Are you sure you want to delete this payment mode?')) {
-                        // TODO: Add delete logic
-                        parentRow.remove(); // Optimistic deletion
-                        alert('Payment Mode deleted.');
-                    }
+                    // if (confirm('Are you sure you want to delete this payment mode?')) {
+                    //     // TODO: Add delete logic
+                    //     document.getElementById(`deleteForm-${paymentModeId}`).submit();
+
+                    // }
                     break;
             }
         });
     });
 
-    // --- Form Submission Handling ---
-    const addPaymentModeForm = document.getElementById('add-payment-mode-form');
-    if (addPaymentModeForm) {
-        addPaymentModeForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            console.log('Add Payment Mode Form Submitted');
-            // TODO: Add API call to create new payment mode
-            alert('New payment mode added (simulated)!');
-            closeAllPanels();
-        });
-    }
 
-    const editPaymentModeForm = document.getElementById('edit-payment-mode-form');
-    if (editPaymentModeForm) {
-        editPaymentModeForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            console.log('Edit Payment Mode Form Submitted');
-            // TODO: Add API call to update payment mode
-            alert('Payment mode updated (simulated)!');
-            closeAllPanels();
-        });
-    }
 });

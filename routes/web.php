@@ -9,7 +9,9 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CardDetailController;
 use App\Http\Controllers\EexpenseController;
 use App\Http\Controllers\OffersController;
-
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\PeymentModeController;
+use App\Http\Controllers\TaxesController;
 
 Route::get('/home', function () {
     return view('welcome');
@@ -19,25 +21,45 @@ Route::get('/payment', function () {
     return view('CRMpayment');
 })->name('payment.payment');
 
-// Route::get('/lead-offer', function () {
-//     return view('CRMleads_offer');
-// })->name('lead.offer');
 
-Route::get('setting',function(){
-    return view('CRMsetting');
-})->name('setting.setting');
+Route::get('setting/company', [CompanyController::class, 'index'])->name('setting.company');
+Route::post('setting/company/update', [CompanyController::class, 'updateCompanyInfo'])->name('setting.company.update');
 
-Route::get('setting/payment-mode',function(){
-    return view('payment_mode');
-})->name('setting.payment_mode');
+// Route::get('setting/payment-mode',function(){
+//     return view('payment_mode');
+// })->name('setting.payment_mode');
+
+Route::get('setting/payment-mode', [PeymentModeController::class, 'index'])->name('setting.payment_mode');
+Route::post('setting/payment-mode/store', [PeymentModeController::class, 'storepaymode'])->name('setting.payment_mode.store');
+Route::post('/payment-modes/update-toggle/{id}', [PeymentModeController::class, 'updateToggle'])->name('payment-modes.update-toggle');
+
+Route::get('/payment-modes/{id}', [PeymentModeController::class, 'getOne']);
+
+Route::post('/payment-modes/update', [PeymentModeController::class, 'update'])
+    ->name('payment-modes.update');
+
+Route::delete('/payment-modes/{id}', [PeymentModeController::class, 'destroy'])->name('payment_modes.destroy');
+
+
+    
+
+    
 
 Route::get('setting/public-form',function(){
     return view('CRMsetting_publicform');
 })->name('setting.public_form');
 
-Route::get('/taxes', function () {
-    return view('taxes');
-})->name('setting.taxes');
+// Route::get('/taxes', function () {
+//     return view('taxes');
+// })->name('setting.taxes');
+
+Route::get('setting/taxes', [TaxesController::class, 'index'])->name('setting.taxes');
+Route::post('/tax/update-toggle/{id}', [TaxesController::class, 'updateToggle']);
+Route::post('/tax/store', [TaxesController::class, 'storeTax'])->name('tax.store');
+Route::delete('/tax/{id}', [TaxesController::class, 'destroy'])->name('tax.destroy');
+Route::get('/tax/{id}', [TaxesController::class, 'show']);  
+Route::post('/tax/update/{id}', [TaxesController::class, 'updateTax']);
+
 
 Route::get('adminList',function(){
     return view('AdminList');
