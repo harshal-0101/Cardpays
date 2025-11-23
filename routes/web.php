@@ -57,8 +57,11 @@ Route::get('setting/taxes', [TaxesController::class, 'index'])->name('setting.ta
 Route::post('/tax/update-toggle/{id}', [TaxesController::class, 'updateToggle']);
 Route::post('/tax/store', [TaxesController::class, 'storeTax'])->name('tax.store');
 Route::delete('/tax/{id}', [TaxesController::class, 'destroy'])->name('tax.destroy');
-Route::get('/tax/{id}', [TaxesController::class, 'show']);  
-Route::post('/tax/update/{id}', [TaxesController::class, 'updateTax']);
+Route::post('/tax/update', [TaxesController::class, 'update'])->name('taxes.update');
+
+
+
+
 
 
 Route::get('adminList',function(){

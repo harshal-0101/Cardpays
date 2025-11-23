@@ -62,42 +62,75 @@ public function show($id)
     return \App\Models\Tax::findOrFail($id);
 }
 
-public function updateTax(Request $request, $id)
-{
-   try{
-    $tax = \App\Models\Tax::findOrFail($id);
+// public function updateTax(Request $request, $id)
+// {
+//    try{
+//     $tax = \App\Models\Tax::findOrFail($id);
 
-    $tax->Name = $request->name;
-    $tax->Value = $request->value;
-    $tax->Default = $request->default ? 1 : 0;
-    $tax->Enabled = $request->enabled ? 1 : 0;
+//     $tax->Name = $request->name;
+//     $tax->Value = $request->value;
+//     $tax->Default = $request->default ? 1 : 0;
+//     $tax->Enabled = $request->enabled ? 1 : 0;
 
-    $tax->save();
+//     $tax->save();
 
-    return response()->json([
-        'success' => true,
-        'message' => 'Tax updated successfully!'
-    ]);
-   } catch (\Exception $e) {
-    return response()->json([
-        'success' => false,
-        'message' => 'An error occurred while updating the tax. ' . $e->getMessage()
-    ], 500);
+//     return response()->json([
+//         'success' => true,
+//         'message' => 'Tax updated successfully!'
+//     ]);
+//    } catch (\Exception $e) {
+//     return response()->json([
+//         'success' => false,
+//         'message' => 'An error occurred while updating the tax. ' . $e->getMessage()
+//     ], 500);
     
-}
+// }
 
+// }
 
-
-
- function destroy($id)
+public function update(Request $request)
 {
-    $payment = Taxes::findOrFail($id);
-    $payment->delete();
+    try {
+        $request->validate([
+            'id' => 'required|integer|exists:taxes,id',
+            'name' => 'required|string|max:255',
+            'rate' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
 
-    return redirect()->back()->with('success', 'Payment mode deleted successfully!');
+        $taxes = Taxes::findOrFail($request->id);
+
+        $taxes->Name = $request->name;
+        $taxes->rate = $request->rate;
+        $taxes->Default = $request->has('Default');
+        $taxes->Enabled = $request->has('Enabled');
+        $taxes->save();
+
+        return redirect()->back()->with('success', 'Tax updated successfully!');
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'An error occurred while updating the tax. ' . $e->getMessage()
+        ], 500);
+    }
 }
 
 
 
+function destroy($id)
+{
+    $taxes = Taxes::findOrFail($id);
+    $taxes->delete();
+
+    return redirect()->back()->with('success', 'Tax deleted successfully!');
 }
+
+public function edit($id)
+    {
+        $tax = Taxes::findOrFail($id); 
+        // Pass the tax object to your view
+        return view('setting.taxes', compact('tax'));
+    }
+
+
 }

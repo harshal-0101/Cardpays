@@ -36,6 +36,9 @@
             </div>
         </header>
 
+        <div id="ajax-alert" style="display:none;" class="alert"></div>
+
+
         @if(session('success'))
     <div class="alert alert-success">
         {{ session('success') }}
@@ -97,7 +100,7 @@
                                 <i class='bx bx-show'></i>
                                 <span>Show</span>
                             </li> -->
-                            <li data-action="edit" onclick="openEditTaxForm({{ $tax->id }})">
+                           <li data-action="edit" class="edit-btn" data-id="{{ $tax->id }}" data-name="{{ $tax->Name }}" data-rate="{{ $tax->rate }}" data-default="{{ $tax->Default }}"data-enabled="{{ $tax->Enabled }}">
                                 <i class='bx bx-pencil'></i>
                                 <span>Edit</span>
                             </li>
@@ -159,6 +162,7 @@
         
         <form class="admin-form" id="add-tax-form" method="POST" action="{{ route('tax.store') }}">
             @csrf
+
             <div class="form-group">
                 <label for="tax-name">Name <span class="required-asterisk">*</span></label>
                 <input type="text" id="tax-name" name="Name" required >
@@ -234,21 +238,25 @@
             <button class="close-btn" id="close-edit-panel-btn">&times;</button>
         </div>
         
-        <form class="admin-form" id="edit-tax-form">
+        <form class="admin-form" id="edit-tax-form" method="post" action="{{route('taxes.update')}}">
+            @csrf
+            @method('Post')
+            <input type="hidden" id="edit-tax-id" name="id" >
+
             <div class="form-group">
                 <label for="edit-tax-name">Name <span class="required-asterisk">*</span></label>
-                <input type="text" id="edit-tax-name" value="Tax 0%" required>
+                <input type="text" id="edit-tax-name" name="name" required>
             </div>
             
             <div class="form-group">
                 <label for="edit-tax-value">Value <span class="required-asterisk">*</span></label>
-                <input type="text" id="edit-tax-value" value="0%" required>
+                <input type="text" id="edit-tax-value" name="rate"  required>
             </div>
             
             <div class="form-group">
                 <label for="edit-tax-default">Default</label>
                 <label class="toggle-switch">
-                    <input type="checkbox" id="edit-tax-default">
+                    <input type="checkbox" id="edit-tax-default"  name="Default">
                     <span class="slider"></span>
                 </label>
             </div>
@@ -256,7 +264,7 @@
             <div class="form-group">
                 <label for="edit-tax-enabled">Enabled</label>
                 <label class="toggle-switch">
-                    <input type="checkbox" id="edit-tax-enabled" checked>
+                    <input type="checkbox" id="edit-tax-enabled" name="Enabled" checked >
                     <span class="slider"></span>
                 </label>
             </div>
@@ -302,40 +310,38 @@ function deleteTax(id) {
     }
 }
 
+// -------------show old data in form Tax Panel ----------------
+document.addEventListener("DOMContentLoaded", function () {
 
-document.getElementById("edit-tax-form").addEventListener("submit", function (e) {
-    e.preventDefault();
+    document.querySelectorAll(".edit-btn").forEach(btn => {
+        btn.addEventListener("click", function () {
 
-    let id = document.getElementById("edit-tax-id").value;
+            // Open panel
+            document.getElementById("edit-tax-panel").classList.add("open");
 
-    let formData = {
-        name: document.getElementById("edit-tax-name").value,
-        value: document.getElementById("edit-tax-value").value,
-        default: document.getElementById("edit-tax-default").checked ? 1 : 0,
-        enabled: document.getElementById("edit-tax-enabled").checked ? 1 : 0,
-        _token: document.querySelector('meta[name="csrf-token"]').content
-    };
+            // Set old values
+            document.getElementById("edit-tax-id").value = this.dataset.id;
+            document.getElementById("edit-tax-name").value = this.dataset.name;
+            document.getElementById("edit-tax-value").value = this.dataset.rate;
 
-    fetch(`/tax/update/${id}`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
-        body: JSON.stringify(formData)
-    })
-    .then(res => res.json())
-    .then(response => {
-        if (response.success) {
-            alert("Updated successfully!");
+            document.getElementById("edit-tax-default").checked =
+                this.dataset.default == "1";
 
-            closeEditPanel();   // your own function to hide panel
-        }
-    })
-    .catch(err => {
-        console.error("Error:", err);
+            document.getElementById("edit-tax-enabled").checked =
+                this.dataset.enabled == "1";
+        });
     });
+
 });
+
+
+// --------------- edit tax data---------------
+
+
+
+// ---------error msg-------------
+
+
 
 
 </Script>
