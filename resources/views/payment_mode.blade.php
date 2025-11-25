@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Payment Mode List UI</title>
+    <title>Payment Mode List </title>
     <link rel="stylesheet" href="{{asset('css/payments.css')}}">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
@@ -65,39 +65,41 @@
 
         <div class="list-container">
             <div class="list-row list-header">
-                <span>Payment Mode</span>
-                <span>Description</span>
-                <span>Default</span>
-                <span>Enabled</span>
-                <span></span> </div>
-
-            <div class="list-row data-row">
-                @foreach ($paymentModes as $paymentMode)
-                <span>{{ $paymentMode->Payment_Mode }}</span>
-                <span>{{ $paymentMode->description }}</span>
-                  <span>
-        <label class="toggle-switch">
-            <input
-                type="checkbox"
-                name="Default"
-                data-id="{{ $paymentMode->id }}"
-                data-field="Default"
-                {{ $paymentMode->Default ? 'checked' : '' }}>
-            <span class="slider"></span>
-        </label>
-    </span>
-                 <span>
-        <label class="toggle-switch">
-            <input
-                type="checkbox"
-                name="Enabled"
-                data-id="{{ $paymentMode->id }}"
-                data-field="Enabled"
-                {{ $paymentMode->Enabled ? 'checked' : '' }}>
-            <span class="slider"></span>
-        </label>
-    </span>
-
+                    <span>Payment Mode</span>
+                    <span>Description</span>
+                    <span>Default</span>
+                    <span>Enabled</span>
+                    <span></span> 
+            </div>
+      
+     @foreach ($paymentModes as $paymentMode)    
+         <div class="list-row data-row">
+        
+             <span>{{ $paymentMode->Payment_Mode }}</span>
+             <span>{{ $paymentMode->description }}</span>
+               <span>
+              <label class="toggle-switch">
+                  <input
+                      type="checkbox"
+                      name="Default"
+                      data-id="{{ $paymentMode->id }}"
+                      data-field="Default"
+                      {{ $paymentMode->Default ? 'checked' : '' }}>
+                  <span class="slider"></span>
+              </label>
+          </span>
+                       <span>
+              <label class="toggle-switch">
+                  <input
+                      type="checkbox"
+                      name="Enabled"
+                      data-id="{{ $paymentMode->id }}"
+                      data-field="Enabled"
+                      {{ $paymentMode->Enabled ? 'checked' : '' }}>
+                  <span class="slider"></span>
+              </label>
+          </span>
+    
                 <span class="more-options" data-id="pm_default_123">
                     <i class='bx bx-dots-horizontal-rounded'></i>
                     <div class="dropdown-menu">
@@ -126,11 +128,12 @@
                         </ul>
                     </div>
                 </span>
-                @endforeach
+               
+            </div>
+             @endforeach
                 @if($paymentModes->isEmpty())
                     <span colspan="5">No payment modes found.</span>
                 @endif
-            </div>
         </div>
 
        <div class="pagination">

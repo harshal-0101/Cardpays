@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">   
-    <title>Taxes List UI</title>
+    <title>Taxes</title>
     <link rel="stylesheet" href="{{asset('css/taxes.css')}}">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
@@ -69,10 +69,11 @@
                 <span>Value</span>
                 <span>Default</span>
                 <span>Enabled</span>
-                <span></span> </div>
-
+                <span></span> 
+            </div>
+@foreach($taxes as $tax) 
             <div class="list-row data-row">
-               @foreach($taxes as $tax) 
+               
                 <span>{{ $tax->Name }}</span>
                 <span>{{ $tax->rate }}%</span>
               <span>
@@ -119,12 +120,13 @@
                         </ul>
                     </div>
                 </span>
-                @endforeach
+               
+            </div>
+       @endforeach
 
                 @if($taxes->isEmpty())
                     <p>No taxes available.</p>
-                @endif
-            </div>
+                @endif      
         </div>
 
         <div class="pagination">

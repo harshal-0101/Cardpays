@@ -73,7 +73,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- *** THE LOOP STARTS HERE *** --}}
+                       
                         @foreach ($leads as $lead)
                         <tr>
                             <td data-label="Name">{{ $lead->Name }}</td>

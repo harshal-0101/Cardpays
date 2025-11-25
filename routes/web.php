@@ -22,6 +22,7 @@ Route::get('/payment', function () {
 })->name('payment.payment');
 
 
+
 Route::get('setting/company', [CompanyController::class, 'index'])->name('setting.company');
 Route::post('setting/company/update', [CompanyController::class, 'updateCompanyInfo'])->name('setting.company.update');
 
@@ -61,12 +62,11 @@ Route::post('/tax/update', [TaxesController::class, 'update'])->name('taxes.upda
 
 
 
+// Route::get('adminList',function(){
+//     return view('AdminList');
+// })->name('setting.adminlist');
 
-
-
-Route::get('adminList',function(){
-    return view('AdminList');
-})->name('setting.adminlist');
+Route::get('/adminList',[UserController::class,'index'])->name('setting.adminlist');
 
 
 // Route::get('/', function () {
@@ -99,6 +99,11 @@ Route::post('/loginU', [UserController::class, 'Login'])
 
 
 Route::post('/user/store', [UserController::class, 'store'])->name('user.store');
+Route::put('/user/update/{id}', [UserController::class, 'update'])->name('user.update');
+Route::post('/user/toggle-enabled/{id}', [UserController::class, 'toggleEnabled'])->name('user.toggle.enabled');
+Route::delete('/user/delete/{id}', [UserController::class, 'destroy'])->name('user.delete');
+Route::patch('/user/update-password/{id}', [UserController::class, 'updatePassword']);
+
 
 // routes/web.php
 

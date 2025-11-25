@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Panel Element Definitions ---
     const panelOverlay = document.getElementById('panel-overlay');
-    
+
     // "Add Admin" Panel
     const addAdminPanel = document.getElementById('admin-form-panel');
     const closeAddPanelBtn = document.getElementById('close-panel-btn');
@@ -101,31 +101,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Form: Submissions ---
-    
+
     // "Add Admin" Form
-    if (addAdminForm) {
-        addAdminForm.addEventListener('submit', (e) => {
-            e.preventDefault(); 
-            console.log('ADD Form submitted!');
-            closeAllPanels(); 
-        });
-    }
+    // if (addAdminForm) {
+    //     addAdminForm.addEventListener('submit', (e) => {
+    //         e.preventDefault();
+    //         console.log('ADD Form submitted!');
+    //         closeAllPanels();
+    //     });
+    // }
 
     // "Edit Admin" Form
-    if (editAdminForm) {
-        editAdminForm.addEventListener('submit', (e) => {
-            e.preventDefault(); 
-            console.log('EDIT Form submitted!');
-            closeAllPanels(); 
-        });
-    }
+    // if (editAdminForm) {
+    //     editAdminForm.addEventListener('submit', (e) => {
+    //         e.preventDefault();
+    //         console.log('EDIT Form submitted!');
+    //         closeAllPanels();
+    //     });
+    // }
 
     // "Update Password" Form
     if (updatePasswordForm) {
         updatePasswordForm.addEventListener('submit', (e) => {
-            e.preventDefault(); 
+            e.preventDefault();
             console.log('UPDATE PASSWORD Form submitted!');
-            closeAllPanels(); 
+            closeAllPanels();
         });
     }
 
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Toggle the menu
         button.addEventListener('click', (e) => {
-            e.stopPropagation(); 
+            e.stopPropagation();
             const isVisible = menu.classList.contains('show');
             document.querySelectorAll('.dropdown-menu.show').forEach(openMenu => {
                 openMenu.classList.remove('show');
@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
             item.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const action = item.dataset.action;
-                
+
                 console.log(`Action: ${action} on row.`);
 
                 // Check which action was clicked
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     console.log(`${action} clicked`);
                 }
-                
+
                 menu.classList.remove('show');
             });
         });

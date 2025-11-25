@@ -25,6 +25,8 @@ class User extends Authenticatable
         'email',
         'password',
         'User_Role',
+        'Branch',
+        'Enabled'
     ];
 
     /**
@@ -48,6 +50,8 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'User_Role' => 'string',
+            'Branch' => 'string',
+            'Enabled' => 'boolean'
         ];
     }
 }
